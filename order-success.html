@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>People in Places - 결제 완료</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/homgestyle.css">
+  <style>
+    .result-page {
+      min-height: calc(100vh - 72px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 16px;
+      background: #f7f7f7;
+    }
+    .result-box {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 48px 40px;
+      text-align: center;
+      max-width: 480px;
+      width: 100%;
+    }
+    .result-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      border: 2px solid #111;
+      border-radius: 50%;
+      font-size: 26px;
+      margin-bottom: 24px;
+    }
+    .result-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    .result-msg {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.8;
+      margin-bottom: 8px;
+    }
+    .result-info {
+      background: #f7f7f7;
+      border: 1px solid #eee;
+      padding: 16px;
+      margin: 20px 0;
+      font-size: 12px;
+      color: #333;
+      line-height: 2;
+      text-align: left;
+    }
+    .result-btn {
+      display: inline-block;
+      width: 100%;
+      height: 48px;
+      background: #111;
+      color: #fff;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .result-loading {
+      font-size: 13px;
+      color: #999;
+      margin: 16px 0;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="inner">
+      <button class="menu-btn" type="button" aria-label="Open menu">☰</button>
+      <nav class="nav nav-left">
+        <a href="about.html">About</a>
+        <a href="homepage.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="info.html">Info</a>
+      </nav>
+      <h1 class="logo">PEOPLE IN PLACES</h1>
+      <nav class="nav nav-right">
+        <a href="login.html">Login</a>
+        <a href="mypage.html">My page</a>
+        <a href="admin.html" id="adminMenuLink" style="display: none;">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="result-page">
+    <div class="result-box">
+      <div class="result-icon">✓</div>
+      <h2 class="result-title">결제가 완료되었습니다!</h2>
+      <p class="result-msg">주문해 주셔서 감사합니다.</p>
+      <div class="result-info" id="resultInfo">
+        <p class="result-loading">주문 정보를 처리 중입니다...</p>
+      </div>
+      <button type="button" class="result-btn" id="goMypageBtn">마이페이지에서 주문 확인</button>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/userService.js"></script>
+  <script src="js/orderService.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    document.getElementById('goMypageBtn').addEventListener('click', function () {
+      window.location.href = 'mypage.html';
+    });
+
+    async function handlePaymentSuccess() {
+      const params     = new URLSearchParams(window.location.search);
+      const paymentKey = params.get('paymentKey');
+      const orderId    = params.get('orderId');
+      const amount     = params.get('amount');
+      const infoEl     = document.getElementById('resultInfo');
+
+      // 임시 저장된 주문 정보 불러오기
+      const pendingRaw = sessionStorage.getItem('pip_pending_order');
+      if (!pendingRaw) {
+        infoEl.innerHTML = '<p>주문 정보를 찾을 수 없습니다.</p>';
+        return;
+      }
+
+      const pending = JSON.parse(pendingRaw);
+
+      // 결제 정보 화면에 표시
+      infoEl.innerHTML = `
+        <p>주문번호: <strong>${orderId}</strong></p>
+        <p>상품명: <strong>${pending.draft.title}</strong></p>
+        <p>결제금액: <strong>${Number(amount).toLocaleString('ko-KR')}원</strong></p>
+        <p>주문자: <strong>${pending.shippingInfo.recipient}</strong></p>
+      `;
+
+      // Supabase에 주문 저장
+      await userService.init();
+      const result = await orderService.create({
+        userId: pending.userId,
+        items: [{
+          productId: pending.draft.productId,
+          title:     pending.draft.title,
+          thumbnail: pending.draft.thumbnail,
+          price:     Number(pending.draft.price || 0),
+          quantity:  Number(pending.draft.quantity || 1),
+          category:  pending.draft.category || '',
+        }],
+        totalPrice:   Number(amount),
+        shippingInfo: pending.shippingInfo,
+        paymentKey,
+        orderId,
+      });
+
+      if (result) {
+        // 임시 주문 정보 삭제
+        sessionStorage.removeItem('pip_pending_order');
+        localStorage.removeItem('selectedProductOrder');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', handlePaymentSuccess);
+  </script>
+</body>
+</html>

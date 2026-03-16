@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>People in Places - Notice Detail</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/homgestyle.css">
+  <link rel="stylesheet" href="css/notice-detail.css">
+</head>
+<body>
+  <header class="header">
+    <div class="inner">
+      <button class="menu-btn" type="button" aria-label="Open menu">☰</button>
+      <nav class="nav nav-left">
+        <a href="about.html">About</a>
+        <a href="homepage.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="info.html">Info</a>
+      </nav>
+      <h1 class="logo">PEOPLE IN PLACES</h1>
+      <nav class="nav nav-right">
+        <a href="login.html">Login</a>
+        <a href="mypage.html">My page</a>
+        <a href="admin.html" id="adminMenuLink" style="display: none;">Admin</a>
+      </nav>
+    </div>
+    <div class="mobile-menu">
+      <a href="about.html">About</a>
+      <a href="homepage.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="info.html">Info</a>
+      <a href="login.html">Login</a>
+      <a href="mypage.html">My page</a>
+      <a href="admin.html" id="mobileAdminMenuLink" style="display: none;">Admin</a>
+    </div>
+  </header>
+
+  <main class="notice-detail-page">
+    <section class="notice-detail-section section reveal">
+      <div class="notice-detail-inner">
+        <h2 class="notice-page-title">NOTICE</h2>
+        <article class="notice-detail-box">
+          <div class="notice-detail-head">
+            <h3 class="notice-detail-title" id="noticeTitle">제목</h3>
+            <div class="notice-detail-meta">
+              <span id="noticeAuthor">관리자</span>
+              <span id="noticeDate">-</span>
+              <span>조회수 <em id="noticeViews">0</em></span>
+              <span>좋아요 <em id="noticeLikes">0</em></span>
+            </div>
+          </div>
+          <div class="notice-detail-content" id="noticeContent">
+            <p>게시물 내용이 들어갑니다.</p>
+          </div>
+        </article>
+        <div class="notice-detail-bottom">
+          <a href="info.html" class="notice-back-btn">목록으로</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer reveal">
+    <div class="inner footer-inner">
+      <h2>PEOPLE IN PLACES</h2>
+      <div class="footer-links">
+        <a href="#">이용약관</a>
+        <a href="#">개인정보처리방침</a>
+      </div>
+      <div class="footer-info">
+        <p>퍼플인플레이스(PEOPLE IN PLACES) 사업자정보 통신판매신고번호</p>
+        <p>CEO 이수현 ADDRESS 경기도 하남시 하남대로 895 전화번호 010-8356-0850 이메일 sudojs091004@gmail.com</p>
+        <p>CONTACT 인스타그램 @people_in_places</p>
+      </div>
+      <p class="copyright">Copyright moondueg all rights reserved</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/userService.js"></script>
+  <script src="js/noticeService.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/notice-detail.js"></script>
+</body>
+</html>

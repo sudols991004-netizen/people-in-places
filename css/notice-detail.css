@@ -1,0 +1,176 @@
+.notice-detail-page {
+  background: #fff;
+  color: #111;
+}
+
+.notice-detail-section {
+  padding: 48px 0 100px;
+}
+
+.notice-detail-inner {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.notice-page-title {
+  margin-bottom: 24px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.notice-detail-box {
+  background: #fff;
+  border-top: 2px solid #111;
+  border-bottom: 1px solid #d8d8d8;
+}
+
+.notice-detail-head {
+  padding: 24px 24px 18px;
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.notice-detail-title {
+  margin-bottom: 14px;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.notice-detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  font-size: 13px;
+  color: #666;
+}
+
+.notice-detail-meta em {
+  font-style: normal;
+}
+
+.notice-detail-content {
+  min-height: 320px;
+  padding: 32px 24px 40px;
+  font-size: 15px;
+  line-height: 1.9;
+  color: #222;
+}
+
+.notice-detail-content p + p {
+  margin-top: 16px;
+}
+
+.notice-detail-bottom {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 28px;
+}
+
+.notice-back-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  height: 44px;
+  padding: 0 20px;
+  border: 1px solid #111;
+  background: #fff;
+  color: #111;
+  font-size: 14px;
+}
+
+@media (max-width: 1024px) {
+  .notice-detail-section {
+    padding: 40px 0 80px;
+  }
+
+  .notice-detail-head {
+    padding: 22px 20px 16px;
+  }
+
+  .notice-detail-content {
+    padding: 28px 20px 36px;
+  }
+}
+
+@media (max-width: 768px) {
+  .notice-detail-section {
+    padding: 32px 0 64px;
+  }
+
+  .notice-detail-inner {
+    padding: 0 16px;
+  }
+
+  .notice-page-title {
+    margin-bottom: 18px;
+    font-size: 17px;
+  }
+
+  .notice-detail-head {
+    padding: 18px 16px 14px;
+  }
+
+  .notice-detail-title {
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+
+  .notice-detail-meta {
+    gap: 10px;
+    font-size: 12px;
+  }
+
+  .notice-detail-content {
+    min-height: 220px;
+    padding: 22px 16px 28px;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .notice-detail-bottom {
+    margin-top: 20px;
+  }
+
+  .notice-back-btn {
+    width: 100%;
+    height: 42px;
+    font-size: 13px;
+  }
+}
+/* ── 좋아요 버튼 (이슈 6 추가) ── */
+.like-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 24px 0 0;
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.like-btn:hover {
+  border-color: #e85c5c;
+  color: #e85c5c;
+}
+
+.like-btn.is-liked {
+  border-color: #e85c5c;
+  color: #e85c5c;
+  background: #fff5f5;
+}
+
+.like-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.like-count {
+  font-size: 14px;
+}

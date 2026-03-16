@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>People in Places - My Page</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/homgestyle.css">
+  <link rel="stylesheet" href="css/mypage.css">
+</head>
+<body>
+  <header class="header">
+    <div class="inner">
+      <button class="menu-btn" type="button" aria-label="Open menu">☰</button>
+      <nav class="nav nav-left">
+        <a href="about.html">About</a>
+        <a href="homepage.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="info.html">Info</a>
+      </nav>
+      <h1 class="logo">PEOPLE IN PLACES</h1>
+      <nav class="nav nav-right">
+        <a href="login.html">Login</a>
+        <a href="mypage.html">My page</a>
+        <a href="admin.html" id="adminMenuLink" style="display: none;">Admin</a>
+      </nav>
+    </div>
+    <div class="mobile-menu">
+      <a href="about.html">About</a>
+      <a href="homepage.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="info.html">Info</a>
+      <a href="login.html">Login</a>
+      <a href="mypage.html">My page</a>
+      <a href="admin.html" id="mobileAdminMenuLink" style="display: none;">Admin</a>
+    </div>
+  </header>
+
+  <main class="mypage-page">
+    <div class="mypage-inner">
+      <aside class="mypage-sidebar">
+        <nav class="mypage-side-nav" id="mypageSideNav">
+          <a href="#order-history" class="mypage-side-link is-active" data-section-link="order-history">주문조회</a>
+          <a href="#order-detail" class="mypage-side-link" data-section-link="order-detail">주문상세</a>
+          <a href="#profile-edit" class="mypage-side-link" data-section-link="profile-edit">회원정보</a>
+          <a href="#account-delete" class="mypage-side-link" data-section-link="account-delete">회원탈퇴</a>
+        </nav>
+      </aside>
+      <div class="mypage-content">
+        <section class="mypage-section reveal" id="order-history">
+          <div class="mypage-box">
+            <p class="mypage-box-label">Postcard</p>
+            <div class="mypage-greeting-box">
+              <h3 class="mypage-greeting" id="historyUserName">홍길동 님 안녕하세요.</h3>
+              <p class="mypage-sub-text">누적 기부금액 <strong id="historyDonationAmount">1,000원</strong></p>
+            </div>
+            <div class="order-history-list" id="orderHistoryList"></div>
+            <p class="mypage-brand">People in places</p>
+          </div>
+        </section>
+        <section class="mypage-section reveal" id="order-detail">
+          <div class="mypage-box">
+            <p class="mypage-box-label">Postcard</p>
+            <div class="mypage-greeting-box">
+              <h3 class="mypage-greeting" id="detailUserName">홍길동 님 안녕하세요.</h3>
+              <p class="mypage-sub-text">누적 기부금액 <strong id="detailDonationAmount">1,000원</strong></p>
+            </div>
+            <div class="order-detail-meta">
+              <span>주문번호 <strong id="detailOrderId">-</strong></span>
+              <span>주문일자 <strong id="detailOrderDate">-</strong></span>
+            </div>
+            <div class="order-detail-product" id="orderDetailProduct"></div>
+            <div class="order-detail-info">
+              <div class="detail-info-row"><span>주문자</span><strong id="detailRecipient">-</strong></div>
+              <div class="detail-info-row"><span>휴대폰 번호</span><strong id="detailPhone">-</strong></div>
+              <div class="detail-info-row"><span>이메일</span><strong id="detailEmail">-</strong></div>
+              <div class="detail-info-row"><span>배송지</span><strong id="detailAddress">-</strong></div>
+              <div class="detail-info-row"><span>상품금액</span><strong id="detailItemPrice">-</strong></div>
+              <div class="detail-info-row"><span>최종결제금액</span><strong id="detailFinalPrice">-</strong></div>
+            </div>
+            <p class="mypage-brand">People in places</p>
+          </div>
+        </section>
+        <section class="mypage-section reveal" id="profile-edit">
+          <div class="mypage-box">
+            <p class="mypage-box-label">Postcard</p>
+            <div class="mypage-greeting-box">
+              <h3 class="mypage-greeting" id="profileUserName">홍길동 님 안녕하세요.</h3>
+              <p class="mypage-sub-text">누적 기부금액 <strong id="profileDonationAmount">1,000원</strong></p>
+            </div>
+            <form class="profile-form" id="profileForm">
+              <div class="profile-row"><label for="profileName">이름</label><input type="text" id="profileName"></div>
+              <div class="profile-row"><label for="profilePhone">휴대폰 번호</label><input type="text" id="profilePhone"></div>
+              <div class="profile-row"><label for="profileEmail">이메일</label><input type="email" id="profileEmail"></div>
+              <div class="profile-row"><label for="profileAddress">배송지</label><input type="text" id="profileAddress"></div>
+              <div class="profile-row"><label for="profilePassword">비밀번호 재입력</label><input type="password" id="profilePassword"></div>
+              <button type="submit" class="black-btn">수정하기</button>
+            </form>
+            <p class="mypage-brand">People in places</p>
+          </div>
+        </section>
+        <section class="mypage-section reveal" id="account-delete">
+          <div class="mypage-box">
+            <p class="mypage-box-label">Postcard</p>
+            <div class="mypage-greeting-box">
+              <h3 class="mypage-greeting" id="deleteUserName">홍길동 님 안녕하세요.</h3>
+              <p class="mypage-sub-text">누적 기부금액 <strong id="deleteDonationAmount">1,000원</strong></p>
+            </div>
+            <div class="delete-box">
+              <p>가입된 회원정보가 모두 삭제됩니다.</p>
+              <p>작성하신 게시물은 삭제되지 않습니다.</p>
+              <p>회원탈퇴를 결정하시겠습니까?</p>
+              <button type="button" class="black-btn" id="deleteAccountBtn">탈퇴하기</button>
+            </div>
+            <p class="mypage-brand">People in places</p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer reveal">
+    <div class="inner footer-inner">
+      <h2>PEOPLE IN PLACES</h2>
+      <div class="footer-links">
+        <a href="#">이용약관</a>
+        <a href="#">개인정보처리방침</a>
+      </div>
+      <div class="footer-info">
+        <p>퍼플인플레이스(PEOPLE IN PLACES) 사업자정보 통신판매신고번호</p>
+        <p>CEO 이수현 ADDRESS 경기도 하남시 하남대로 895 전화번호 010-8356-0850 이메일 sudojs091004@gmail.com</p>
+        <p>CONTACT 인스타그램 @people_in_places</p>
+      </div>
+      <p class="copyright">Copyright moondueg all rights reserved</p>
+    </div>
+  </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/userService.js"></script>
+  <script src="js/orderService.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/mypage.js"></script>
+</body>
+</html>

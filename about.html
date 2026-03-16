@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>People in Places - About</title>
+
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/homgestyle.css">
+  <link rel="stylesheet" href="css/about.css">
+</head>
+<body>
+  <header class="header">
+    <div class="inner">
+      <button class="menu-btn" type="button" aria-label="Open menu">☰</button>
+
+      <nav class="nav nav-left">
+        <a href="about.html">About</a>
+        <a href="homepage.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="info.html">Info</a>
+      </nav>
+
+      <h1 class="logo">PEOPLE IN PLACES</h1>
+
+      <nav class="nav nav-right">
+        <a href="login.html">Login</a>
+        <a href="mypage.html">My page</a>
+        <a href="admin.html" id="adminMenuLink" style="display: none;">Admin</a>
+      </nav>
+    </div>
+
+    <div class="mobile-menu">
+      <a href="about.html">About</a>
+      <a href="homepage.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="info.html">Info</a>
+      <a href="login.html">Login</a>
+      <a href="mypage.html">My page</a>
+      <a href="admin.html" id="mobileAdminMenuLink" style="display: none;">Admin</a>
+    </div>
+  </header>
+
+  <main class="about-page">
+    <section class="about-hero reveal">
+      <div class="about-hero-image">
+        <img src="img/bridge.jpg" alt="People in Places about main image">
+      </div>
+
+      <div class="about-hero-text">
+        <h2>PEOPLE IN PLACES.</h2>
+        <p>
+          당신의 이야기를 PEOPLE IN PLACES와 함께 특별하게 보관해보세요.<br>
+          PEOPLE IN PLACES는 당신의 이야기가 누군가에겐 힘이 될 수 있도록 도와줍니다.
+        </p>
+      </div>
+    </section>
+
+    <section class="about-intro reveal">
+      <div class="about-inner">
+        <div class="about-copy">
+          <p>
+            <strong>PEOPLE IN PLACES</strong>는 비영리 매거진으로, 당신의 이야기에 힘을 더하는 역할을 합니다.
+          </p>
+          <p>
+            그림이 누군가에겐 새로운 기회가 되고, 또 누군가에겐 다시 걸어갈 수 있는 용기가 되기를 믿습니다.
+          </p>
+          <p>
+            이 매거진에서는 장소에 대한 @moon_dueg_의 주관적인 시선을 담아, 그 공간을 어떤 관점으로 바라보고 해석하는지 나누고자 합니다.
+          </p>
+          <p>
+            <strong>빠르게 흘러가는 이 세상 속에서, 여러분도 @moon_dueg_의 작품과 함께 각자의 이야기를 그려나가 보시길 바랍니다.</strong>
+          </p>
+          <p>
+            그 이야기들은 또 다른 누군가에게 따뜻한 울림과 힘이 될 수 있습니다.
+          </p>
+
+          <br>
+
+          <p>
+            매거진을 통해 발생한 수익은 자선단체 기부 또는 또 다른 비영리 활동의 재원으로 사용될 예정입니다.
+          </p>
+          <p>
+            정기적으로 수익 내역과 사용 계획을 투명하게 공유할 것을 약속드립니다.
+          </p>
+          <p>
+            <strong>투명성을 위해 매달 1일, 수익 현황과 그 활용 방안을 공개하겠습니다.</strong>
+          </p>
+          <p>
+            자선단체에 기부할 경우 해당 단체를 명시하고, 비영리 활동을 위한 예산으로 축적할 경우에는 그 구체적인 계획 또한 함께 공유하겠습니다.
+          </p>
+          <p>
+            단, 수익이 없을 시 따로 명시를 하지는 않겠습니다.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer reveal">
+    <div class="inner footer-inner">
+      <h2>PEOPLE IN PLACES</h2>
+
+      <div class="footer-links">
+        <a href="#">이용약관</a>
+        <a href="#">개인정보처리방침</a>
+      </div>
+
+      <div class="footer-info">
+        <p>퍼플인플레이스(PEOPLE IN PLACES) 사업자정보 통신판매신고번호</p>
+        <p>CEO 이수현 ADDRESS 경기도 하남시 하남대로 895 전화번호 010-8356-0850 이메일 sudojs091004@gmail.com</p>
+        <p>CONTACT 인스타그램 @people_in_places</p>
+      </div>
+
+      <p class="copyright">Copyright moondueg all rights reserved</p>
+    </div>
+  </footer>
+
+  <!-- ✅ 올바른 script 로드 순서 (about.js 제거 — common.js의 reveal로 통합) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/userService.js"></script>
+  <script src="js/common.js"></script>
+</body>
+</html>

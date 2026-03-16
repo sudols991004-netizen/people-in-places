@@ -1,0 +1,84 @@
+============================================================
+각 HTML 파일 하단 스크립트 교체 가이드
+기존 <script> 태그 전부 지우고 아래 내용으로 교체
+============================================================
+
+■ homepage.html
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/userService.js"></script>
+  <script src="js/productService.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/homepage.js"></script>
+
+■ about.html
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/userService.js"></script>
+  <script src="js/common.js"></script>
+
+■ shop.html
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/userService.js"></script>
+  <script src="js/productService.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/shop.js"></script>
+
+■ product-detail.html
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/userService.js"></script>
+  <script src="js/productService.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/product-detail.js"></script>
+
+■ info.html
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/userService.js"></script>
+  <script src="js/noticeService.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/info.js"></script>
+
+■ notice-detail.html
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/userService.js"></script>
+  <script src="js/noticeService.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/notice-detail.js"></script>
+
+■ login.html
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/userService.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/login.js"></script>
+
+■ mypage.html
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/userService.js"></script>
+  <script src="js/orderService.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/mypage.js"></script>
+
+■ order.html
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/userService.js"></script>
+  <script src="js/productService.js"></script>
+  <script src="js/orderService.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/order.js"></script>
+
+■ admin.html
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/userService.js"></script>
+  <script src="js/productService.js"></script>
+  <script src="js/noticeService.js"></script>
+  <script src="js/orderService.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/admin.js"></script>

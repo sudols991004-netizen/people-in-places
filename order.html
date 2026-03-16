@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>People in Places - Order</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/homgestyle.css">
+  <link rel="stylesheet" href="css/order.css">
+</head>
+<body>
+  <header class="header">
+    <div class="inner">
+      <button class="menu-btn" type="button" aria-label="Open menu">☰</button>
+      <nav class="nav nav-left">
+        <a href="about.html">About</a>
+        <a href="homepage.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="info.html">Info</a>
+      </nav>
+      <h1 class="logo">PEOPLE IN PLACES</h1>
+      <nav class="nav nav-right">
+        <a href="login.html">Login</a>
+        <a href="mypage.html">My page</a>
+        <a href="admin.html" id="adminMenuLink" style="display: none;">Admin</a>
+      </nav>
+    </div>
+    <div class="mobile-menu">
+      <a href="about.html">About</a>
+      <a href="homepage.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="info.html">Info</a>
+      <a href="login.html">Login</a>
+      <a href="mypage.html">My page</a>
+      <a href="admin.html" id="mobileAdminMenuLink" style="display: none;">Admin</a>
+    </div>
+  </header>
+
+  <main class="order-page">
+    <div class="order-inner">
+      <div class="order-layout">
+        <section class="order-form-section">
+          <div class="order-box">
+            <h2 class="order-title">주문 / 배송 정보</h2>
+            <form id="orderForm" class="order-form">
+              <div class="order-row"><label for="orderName">주문자명</label><input type="text" id="orderName" required></div>
+              <div class="order-row"><label for="orderPhone">휴대폰 번호</label><input type="text" id="orderPhone" required></div>
+              <div class="order-row"><label for="orderEmail">이메일</label><input type="email" id="orderEmail" required></div>
+              <div class="order-row"><label for="orderAddress">배송지</label><input type="text" id="orderAddress" required></div>
+              <div class="order-row"><label for="orderMemo">배송 메모</label><textarea id="orderMemo" rows="4" placeholder="배송 시 요청사항을 입력하세요."></textarea></div>
+            </form>
+          </div>
+        </section>
+        <aside class="order-summary-section">
+          <div class="order-box">
+            <h2 class="order-title">주문 상품</h2>
+            <div id="orderSummaryContainer"></div>
+            <div class="order-summary-total">
+              <div class="summary-line"><span>상품 금액</span><strong id="summaryItemPrice">0원</strong></div>
+              <div class="summary-line"><span>수량</span><strong id="summaryQuantity">0개</strong></div>
+              <div class="summary-line total"><span>최종 결제 금액</span><strong id="summaryFinalPrice">0원</strong></div>
+            </div>
+            <button type="button" class="black-btn order-submit-btn" id="submitOrderBtn">결제하기</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer reveal">
+    <div class="inner footer-inner">
+      <h2>PEOPLE IN PLACES</h2>
+      <div class="footer-links">
+        <a href="#">이용약관</a>
+        <a href="#">개인정보처리방침</a>
+      </div>
+      <div class="footer-info">
+        <p>퍼플인플레이스(PEOPLE IN PLACES) 사업자정보 통신판매신고번호</p>
+        <p>CEO 이수현 ADDRESS 경기도 하남시 하남대로 895 전화번호 010-8356-0850 이메일 sudojs091004@gmail.com</p>
+        <p>CONTACT 인스타그램 @people_in_places</p>
+      </div>
+      <p class="copyright">Copyright moondueg all rights reserved</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="https://js.tosspayments.com/v2/standard"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/userService.js"></script>
+  <script src="js/productService.js"></script>
+  <script src="js/orderService.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/order.js"></script>
+</body>
+</html>

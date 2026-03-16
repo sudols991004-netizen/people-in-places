@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>People in Places - Shop</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/homgestyle.css">
+  <link rel="stylesheet" href="css/shop.css">
+</head>
+<body>
+  <header class="header">
+    <div class="inner">
+      <button class="menu-btn" type="button" aria-label="Open menu">☰</button>
+      <nav class="nav nav-left">
+        <a href="about.html">About</a>
+        <a href="homepage.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="info.html">Info</a>
+      </nav>
+      <h1 class="logo">PEOPLE IN PLACES</h1>
+      <nav class="nav nav-right">
+        <a href="login.html">Login</a>
+        <a href="mypage.html">My page</a>
+        <a href="admin.html" id="adminMenuLink" style="display: none;">Admin</a>
+      </nav>
+    </div>
+    <div class="mobile-menu">
+      <a href="about.html">About</a>
+      <a href="homepage.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="info.html">Info</a>
+      <a href="login.html">Login</a>
+      <a href="mypage.html">My page</a>
+      <a href="admin.html" id="mobileAdminMenuLink" style="display: none;">Admin</a>
+    </div>
+  </header>
+
+  <main class="shop-page">
+    <section class="shop-hero reveal">
+      <div class="shop-inner">
+        <h2 class="shop-title">PRODUCT</h2>
+        <div class="shop-category-tabs">
+          <button class="shop-tab is-active" type="button" data-filter="all">ALL</button>
+          <button class="shop-tab" type="button" data-filter="wallpaper">WALL PAPER</button>
+          <button class="shop-tab" type="button" data-filter="postcard">POSTCARD</button>
+        </div>
+      </div>
+    </section>
+    <section class="shop-product-section reveal">
+      <div class="shop-inner">
+        <div class="shop-slider">
+          <div class="shop-product-list" id="shopProductList"></div>
+          <div class="shop-pagination">
+            <button class="page-arrow" type="button" aria-label="Previous page" data-shop-prev>&#10094;</button>
+            <div class="shop-page-numbers" id="shopPageNumbers"></div>
+            <button class="page-arrow" type="button" aria-label="Next page" data-shop-next>&#10095;</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer reveal">
+    <div class="inner footer-inner">
+      <h2>PEOPLE IN PLACES</h2>
+      <div class="footer-links">
+        <a href="#">이용약관</a>
+        <a href="#">개인정보처리방침</a>
+      </div>
+      <div class="footer-info">
+        <p>퍼플인플레이스(PEOPLE IN PLACES) &nbsp; 사업자정보 &nbsp; 통신판매신고번호</p>
+        <p>CEO 이수현 &nbsp; ADDRESS 경기도 하남시 하남대로 895 &nbsp; 전화번호 010-8356-0850 &nbsp; 이메일 sudojs091004@gmail.com</p>
+        <p>CONTACT &nbsp; 인스타그램 @people_in_places</p>
+      </div>
+      <p class="copyright">Copyright moondueg all rights reserved</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/userService.js"></script>
+  <script src="js/productService.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/shop.js"></script>
+</body>
+</html>

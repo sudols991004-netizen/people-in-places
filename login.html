@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>People in Places - Login</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/homgestyle.css">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+  <header class="header">
+    <div class="inner">
+      <button class="menu-btn" type="button" aria-label="Open menu">☰</button>
+      <nav class="nav nav-left">
+        <a href="about.html">About</a>
+        <a href="homepage.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="info.html">Info</a>
+      </nav>
+      <h1 class="logo">PEOPLE IN PLACES</h1>
+      <nav class="nav nav-right">
+        <a href="login.html">Login</a>
+        <a href="mypage.html">My page</a>
+        <a href="admin.html" id="adminMenuLink" style="display: none;">Admin</a>
+      </nav>
+    </div>
+    <div class="mobile-menu">
+      <a href="about.html">About</a>
+      <a href="homepage.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="info.html">Info</a>
+      <a href="login.html">Login</a>
+      <a href="mypage.html">My page</a>
+      <a href="admin.html" id="mobileAdminMenuLink" style="display: none;">Admin</a>
+    </div>
+  </header>
+
+  <div class="modal-backdrop" id="modalBackdrop"></div>
+
+  <!-- ① 로그인 -->
+  <div class="modal" id="loginModal" role="dialog" aria-modal="true">
+    <button class="modal-close" id="loginClose" type="button" aria-label="닫기">✕</button>
+    <h2 class="modal-title">로그인</h2>
+    <button class="kakao-btn" type="button" id="kakaoBtn">카카오톡으로 시작하기</button>
+    <div class="modal-divider"><span>또는</span></div>
+    <form class="modal-form" id="loginForm">
+      <div class="modal-input-wrap">
+        <input type="email" id="loginEmail" class="modal-input" placeholder="이메일" autocomplete="email" required>
+      </div>
+      <div class="modal-input-wrap">
+        <input type="password" id="loginPassword" class="modal-input" placeholder="비밀번호" autocomplete="current-password" required>
+      </div>
+      <label class="modal-remember">
+        <input type="checkbox" id="rememberCheck">
+        <span class="modal-checkbox-custom"></span>
+        <span class="modal-remember-text">로그인상태 유지</span>
+      </label>
+      <p class="modal-error" id="loginError"></p>
+      <button type="submit" class="modal-submit-btn" id="loginSubmitBtn">로그인</button>
+    </form>
+    <div class="modal-bottom-links">
+      <button type="button" class="modal-text-btn" id="goRegisterBtn">회원가입</button>
+      <button type="button" class="modal-text-btn" id="goFindBtn">아이디/비밀번호 찾기</button>
+    </div>
+  </div>
+
+  <!-- ② 회원가입 (6단계: 약관→휴대폰인증→아이디/비번→배송지→이메일인증→완료) -->
+  <div class="modal modal--wide" id="registerModal" role="dialog" aria-modal="true">
+    <button class="modal-close" id="registerClose" type="button" aria-label="닫기">✕</button>
+    <div class="modal-step-bar">
+      <span class="modal-step is-active" data-step="0">1. 약관</span>
+      <span class="modal-step-arrow">›</span>
+      <span class="modal-step" data-step="1">2. 휴대폰</span>
+      <span class="modal-step-arrow">›</span>
+      <span class="modal-step" data-step="2">3. 계정설정</span>
+      <span class="modal-step-arrow">›</span>
+      <span class="modal-step" data-step="3">4. 배송지</span>
+      <span class="modal-step-arrow">›</span>
+      <span class="modal-step" data-step="4">5. 완료</span>
+    </div>
+
+    <!-- step 0: 이용약관 -->
+    <div class="modal-step-panel" id="regStep0">
+      <h2 class="modal-title">이용약관 동의</h2>
+      <div class="terms-all-wrap">
+        <label class="terms-check-row terms-check-row--all">
+          <input type="checkbox" id="termsAll" class="terms-checkbox">
+          <span class="terms-checkbox-custom"></span>
+          <span class="terms-check-label terms-check-label--all">전체 동의하기</span>
+        </label>
+        <p class="terms-all-desc">선택 항목 포함 모든 약관에 동의합니다.</p>
+      </div>
+      <div class="terms-divider"></div>
+      <div class="terms-list">
+        <div class="terms-item">
+          <label class="terms-check-row">
+            <input type="checkbox" id="terms1" class="terms-checkbox" data-required="true">
+            <span class="terms-checkbox-custom"></span>
+            <span class="terms-check-label">[필수] 이용약관 동의</span>
+          </label>
+          <button type="button" class="terms-view-btn" data-terms="terms1">보기</button>
+        </div>
+        <div class="terms-content is-hidden" id="terms1Content">
+          <p>이용약관 내용이 들어갑니다. 추후 실제 약관으로 교체 예정입니다.</p>
+        </div>
+        <div class="terms-item">
+          <label class="terms-check-row">
+            <input type="checkbox" id="terms2" class="terms-checkbox" data-required="true">
+            <span class="terms-checkbox-custom"></span>
+            <span class="terms-check-label">[필수] 개인정보 수집 및 이용 동의</span>
+          </label>
+          <button type="button" class="terms-view-btn" data-terms="terms2">보기</button>
+        </div>
+        <div class="terms-content is-hidden" id="terms2Content">
+          <p>개인정보 수집 및 이용에 관한 내용이 들어갑니다. 추후 실제 약관으로 교체 예정입니다.</p>
+        </div>
+        <div class="terms-item">
+          <label class="terms-check-row">
+            <input type="checkbox" id="terms3" class="terms-checkbox" data-required="false">
+            <span class="terms-checkbox-custom"></span>
+            <span class="terms-check-label">[선택] 마케팅 정보 수신 동의</span>
+          </label>
+          <button type="button" class="terms-view-btn" data-terms="terms3">보기</button>
+        </div>
+        <div class="terms-content is-hidden" id="terms3Content">
+          <p>마케팅 정보 수신 동의에 관한 내용이 들어갑니다. 추후 실제 약관으로 교체 예정입니다.</p>
+        </div>
+      </div>
+      <p class="modal-error" id="reg0Error"></p>
+      <button type="button" class="modal-submit-btn" id="termsAgreeBtn" disabled>동의하기</button>
+      <div class="modal-bottom-links">
+        <button type="button" class="modal-text-btn" id="backToLoginBtn">이미 계정이 있으신가요? 로그인</button>
+      </div>
+    </div>
+
+    <!-- step 1: 휴대폰 번호 인증 -->
+    <div class="modal-step-panel is-hidden" id="regStep1">
+      <h2 class="modal-title">휴대폰 번호 인증</h2>
+      <p class="modal-guide">휴대폰 번호를 입력하고 인증번호를 받아주세요.</p>
+      <form class="modal-form" id="regPhoneForm">
+        <div class="modal-input-wrap">
+          <input type="text" id="regName" class="modal-input" placeholder="이름" required>
+        </div>
+        <div style="display:flex; gap:0; margin-bottom:-1px;">
+          <div class="modal-input-wrap" style="flex:1; margin-bottom:0;">
+            <input type="tel" id="regPhone" class="modal-input" placeholder="휴대폰 번호 (예: 01012345678)" required>
+          </div>
+          <button type="button" class="modal-addr-btn" id="sendPhoneOtpBtn" style="flex-shrink:0;">인증번호 발송</button>
+        </div>
+        <div class="modal-input-wrap otp-input-wrap" id="phoneOtpWrap" style="display:none; margin-top:0;">
+          <input type="text" id="regPhoneOtp" class="modal-input" placeholder="인증번호 6자리" maxlength="6" inputmode="numeric">
+          <span class="otp-timer" id="regPhoneOtpTimer">03:00</span>
+        </div>
+        <p class="modal-error" id="reg1Error"></p>
+        <button type="submit" class="modal-submit-btn" id="verifyPhoneBtn" disabled>인증 확인</button>
+      </form>
+      <div class="modal-bottom-links">
+        <button type="button" class="modal-text-btn" id="backToTermsBtn">← 약관으로</button>
+      </div>
+    </div>
+
+    <!-- step 2: 아이디(이메일) / 비밀번호 설정 -->
+    <div class="modal-step-panel is-hidden" id="regStep2">
+      <h2 class="modal-title">계정 설정</h2>
+      <form class="modal-form" id="regForm1">
+        <div class="modal-input-wrap">
+          <input type="email" id="regEmail" class="modal-input" placeholder="이메일 (아이디로 사용)" autocomplete="email" required>
+        </div>
+        <div class="modal-input-wrap">
+          <input type="password" id="regPassword" class="modal-input" placeholder="비밀번호 (10자 이상, 대소문자+숫자+특수문자)" autocomplete="new-password" required>
+        </div>
+        <div class="modal-input-wrap">
+          <input type="password" id="regPasswordConfirm" class="modal-input" placeholder="비밀번호 확인" required>
+        </div>
+        <p class="modal-error" id="reg2Error"></p>
+        <button type="submit" class="modal-submit-btn">다음 단계 →</button>
+      </form>
+      <div class="modal-bottom-links">
+        <button type="button" class="modal-text-btn" id="backToStep1Btn">← 이전으로</button>
+      </div>
+    </div>
+
+    <!-- step 3: 배송지 -->
+    <div class="modal-step-panel is-hidden" id="regStep3">
+      <h2 class="modal-title">배송지 입력</h2>
+      <form class="modal-form" id="regForm2">
+        <div class="modal-address-row">
+          <input type="text" id="regPostcode" class="modal-input modal-input--postcode" placeholder="우편번호" readonly>
+          <button type="button" class="modal-addr-btn" id="postcodeBtn">주소 찾기</button>
+        </div>
+        <div class="modal-input-wrap">
+          <input type="text" id="regAddr1" class="modal-input" placeholder="기본 주소" readonly>
+        </div>
+        <div class="modal-input-wrap">
+          <input type="text" id="regAddr2" class="modal-input" placeholder="상세 주소 (동, 호수 등)">
+        </div>
+        <p class="modal-hint">배송지는 마이페이지에서 언제든 변경할 수 있습니다.</p>
+        <p class="modal-error" id="reg3Error"></p>
+        <button type="submit" class="modal-submit-btn">가입 완료</button>
+      </form>
+      <div class="modal-bottom-links">
+        <button type="button" class="modal-text-btn" id="backToStep2Btn">← 이전으로</button>
+        <button type="button" class="modal-text-btn" id="skipAddrBtn">배송지 나중에 입력</button>
+      </div>
+    </div>
+
+    <!-- step 4: 완료 -->
+    <div class="modal-step-panel is-hidden" id="regStep4">
+      <div class="modal-complete">
+        <div class="modal-complete-icon">✓</div>
+        <h2 class="modal-title">가입 완료!</h2>
+        <p class="modal-complete-msg">PEOPLE IN PLACES에 오신 것을 환영합니다.</p>
+        <button type="button" class="modal-submit-btn" id="goLoginAfterRegBtn">로그인하러 가기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ 아이디/비밀번호 찾기 -->
+  <div class="modal" id="findModal" role="dialog" aria-modal="true">
+    <button class="modal-close" id="findClose" type="button" aria-label="닫기">✕</button>
+    <div class="modal-tabs">
+      <button type="button" class="modal-tab is-active" data-tab="findId">아이디 찾기</button>
+      <button type="button" class="modal-tab" data-tab="findPw">비밀번호 찾기</button>
+    </div>
+
+    <!-- 아이디 찾기 -->
+    <div class="modal-tab-panel" id="findIdPanel">
+      <p class="modal-guide">가입 시 입력한 이름과 휴대폰 번호를 입력해주세요.</p>
+      <form class="modal-form" id="findIdForm">
+        <div class="modal-input-wrap">
+          <input type="text" id="findIdName" class="modal-input" placeholder="이름" required>
+        </div>
+        <div class="modal-input-wrap">
+          <input type="tel" id="findIdPhone" class="modal-input" placeholder="휴대폰 번호" required>
+        </div>
+        <p class="modal-error" id="findIdError"></p>
+        <button type="submit" class="modal-submit-btn">아이디 찾기</button>
+      </form>
+      <div class="modal-result is-hidden" id="findIdResult"></div>
+    </div>
+
+    <!-- 비밀번호 찾기 (2단계: 휴대폰인증 → 새비밀번호) -->
+    <div class="modal-tab-panel is-hidden" id="findPwPanel">
+
+      <!-- step1: 휴대폰 번호 인증 -->
+      <div id="findPwStep1">
+        <p class="modal-guide">가입 시 등록한 휴대폰 번호로 본인인증을 진행합니다.</p>
+        <form class="modal-form" id="findPwPhoneForm">
+          <div style="display:flex; gap:0; margin-bottom:-1px;">
+            <div class="modal-input-wrap" style="flex:1; margin-bottom:0;">
+              <input type="tel" id="findPwPhone" class="modal-input" placeholder="휴대폰 번호 (예: 01012345678)" required>
+            </div>
+            <button type="button" class="modal-addr-btn" id="sendFindPwPhoneOtpBtn" style="flex-shrink:0;">인증번호 발송</button>
+          </div>
+          <div class="modal-input-wrap otp-input-wrap" id="findPwPhoneOtpWrap" style="display:none; margin-top:0;">
+            <input type="text" id="findPwPhoneOtp" class="modal-input" placeholder="인증번호 6자리" maxlength="6" inputmode="numeric">
+            <span class="otp-timer" id="findPwPhoneOtpTimer">03:00</span>
+          </div>
+          <p class="modal-error" id="findPwPhoneErr"></p>
+          <!-- 인증 확인 버튼: 인증번호 발송 후에만 활성화 -->
+          <button type="submit" class="modal-submit-btn" id="verifyFindPwPhoneBtn" disabled>인증 확인</button>
+        </form>
+      </div>
+
+    </div>
+
+    <div class="modal-bottom-links" style="margin-top:16px;">
+      <button type="button" class="modal-text-btn" id="backToLoginFromFindBtn">← 로그인으로</button>
+    </div>
+  </div>
+
+  <!-- ④ 새 비밀번호 설정 모달 (휴대폰 인증 완료 후 열림) -->
+  <div class="modal" id="findPwNewModal" role="dialog" aria-modal="true">
+    <button class="modal-close" id="findPwNewClose" type="button" aria-label="닫기">✕</button>
+    <h2 class="modal-title">비밀번호 찾기</h2>
+
+    <!-- 이메일 발송 완료 화면 -->
+    <div class="modal-complete">
+      <div class="modal-complete-icon">✓</div>
+      <p class="modal-complete-msg">비밀번호 재설정 링크를 발송했습니다.<br>가입 시 등록한 이메일을 확인해주세요.<br><br><small style="color:#aaa;">링크는 1시간 동안 유효합니다.</small></p>
+      <button type="button" class="modal-submit-btn" id="goLoginAfterPwBtn">로그인하러 가기</button>
+    </div>
+  </div>
+
+  <!-- 주소 검색 팝업 -->
+  <div class="addr-backdrop is-hidden" id="addrBackdrop">
+    <div class="addr-popup" id="addrPopup">
+      <div class="addr-popup-head">
+        <span>주소 검색</span>
+        <button type="button" class="addr-popup-close" id="addrPopupClose">✕</button>
+      </div>
+      <div id="daumPostcodeLayer"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/userService.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

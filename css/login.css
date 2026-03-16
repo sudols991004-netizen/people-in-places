@@ -1,0 +1,541 @@
+/* ============================================================
+   login.css — 모든 인증 모달 스타일
+   ============================================================ */
+
+/* backdrop */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+.modal-backdrop.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 기본 모달 */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -46%);
+  z-index: 101;
+  width: 480px;
+  max-width: calc(100vw - 32px);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 40px 36px 32px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+}
+.modal.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+}
+/* 회원가입은 넓게 */
+.modal--wide {
+  width: 520px;
+}
+
+/* 닫기 버튼 */
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #111;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px;
+  transition: opacity 0.15s;
+  z-index: 1;
+}
+.modal-close:hover { opacity: 0.5; }
+
+/* 제목 */
+.modal-title {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 22px;
+  color: #111;
+}
+
+/* 카카오 */
+.kakao-btn {
+  display: block;
+  width: 100%;
+  height: 48px;
+  background: #FEE500;
+  color: #111;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.kakao-btn:hover { opacity: 0.88; }
+
+/* 구분선 */
+.modal-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
+  color: #999;
+  font-size: 12px;
+}
+.modal-divider::before,
+.modal-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e5e5e5;
+}
+
+/* 폼 */
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.modal-input-wrap {
+  border: 1px solid #ddd;
+  margin-bottom: -1px;
+}
+.modal-input {
+  display: block;
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  border: none;
+  background: #fff;
+  font-size: 14px;
+  color: #111;
+  outline: none;
+}
+.modal-input::placeholder { color: #aaa; }
+.modal-input:focus { background: #fafafa; }
+.modal-input[readonly] { background: #f5f5f5; color: #666; cursor: default; }
+
+/* 주소 입력 행 */
+.modal-address-row {
+  display: grid;
+  grid-template-columns: 1fr 110px;
+  border: 1px solid #ddd;
+  margin-bottom: -1px;
+}
+.modal-input--postcode {
+  border: none;
+  height: 48px;
+}
+.modal-addr-btn {
+  height: 48px;
+  border: none;
+  border-left: 1px solid #ddd;
+  background: #111;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+.modal-addr-btn:hover { opacity: 0.75; }
+
+/* 안내 문구 */
+.modal-hint {
+  font-size: 11px;
+  color: #999;
+  margin: 8px 0 4px;
+  line-height: 1.5;
+}
+.modal-guide {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+/* 체크박스 */
+.modal-remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 4px;
+  cursor: pointer;
+  user-select: none;
+}
+.modal-remember input[type="checkbox"] { display: none; }
+.modal-checkbox-custom {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #bbb;
+  background: #fff;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+.modal-remember input[type="checkbox"]:checked + .modal-checkbox-custom {
+  background: #111;
+  border-color: #111;
+}
+.modal-remember input[type="checkbox"]:checked + .modal-checkbox-custom::after {
+  content: "";
+  display: block;
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) translateY(-1px);
+}
+.modal-remember-text { font-size: 13px; color: #333; }
+
+/* 에러 */
+.modal-error {
+  font-size: 12px;
+  color: #d00;
+  min-height: 18px;
+  margin: 8px 0 2px;
+}
+
+/* 제출 버튼 */
+.modal-submit-btn {
+  display: block;
+  width: 100%;
+  height: 48px;
+  background: #111;
+  color: #fff;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: opacity 0.2s;
+}
+.modal-submit-btn:hover { opacity: 0.75; }
+.modal-submit-btn:disabled {
+  background: #bbb;
+  cursor: default;
+  opacity: 1;
+}
+
+/* 하단 링크 */
+.modal-bottom-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+.modal-text-btn {
+  background: none;
+  border: none;
+  font-size: 12px;
+  color: #555;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.15s;
+}
+.modal-text-btn:hover { color: #111; }
+
+/* ── 회원가입 단계 표시 ── */
+.modal-step-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #efefef;
+}
+.modal-step {
+  font-size: 12px;
+  color: #bbb;
+  transition: color 0.2s, font-weight 0.2s;
+}
+.modal-step.is-active {
+  color: #111;
+  font-weight: 700;
+}
+.modal-step.is-done { color: #888; }
+.modal-step-arrow { font-size: 14px; color: #ddd; }
+
+/* 단계 패널 */
+.modal-step-panel { display: block; }
+.modal-step-panel.is-hidden { display: none; }
+
+/* ── 완료 화면 ── */
+.modal-complete {
+  text-align: center;
+  padding: 20px 0 8px;
+}
+.modal-complete-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border: 2px solid #111;
+  border-radius: 50%;
+  font-size: 22px;
+  margin: 0 auto 18px;
+}
+.modal-complete-msg {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+/* ── 탭 (찾기) ── */
+.modal-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 2px solid #111;
+  margin-bottom: 20px;
+}
+.modal-tab {
+  height: 44px;
+  background: none;
+  border: none;
+  font-size: 13px;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.15s;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+}
+.modal-tab.is-active {
+  color: #111;
+  font-weight: 700;
+  border-bottom-color: #111;
+}
+
+/* 탭 패널 */
+.modal-tab-panel { display: block; }
+.modal-tab-panel.is-hidden { display: none; }
+
+/* 결과 박스 */
+.modal-result {
+  margin-top: 16px;
+  border: 1px solid #e5e5e5;
+  padding: 16px;
+  background: #fafafa;
+  font-size: 13px;
+  line-height: 1.8;
+  color: #333;
+}
+.modal-result.is-hidden { display: none; }
+.modal-result strong { color: #111; }
+
+/* ── 주소 팝업 ── */
+.addr-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.addr-backdrop.is-hidden { display: none; }
+.addr-popup {
+  background: #fff;
+  width: 100%;
+  max-width: 500px;
+  border: 1px solid #ddd;
+}
+.addr-popup-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  font-weight: 700;
+}
+.addr-popup-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #111;
+  line-height: 1;
+}
+#daumPostcodeLayer { width: 100%; height: 460px; }
+
+
+/* ── 이용약관 동의 ── */
+.terms-all-wrap {
+  background: #f7f7f7;
+  border: 1px solid #e0e0e0;
+  padding: 16px 18px 12px;
+  margin-bottom: 0;
+}
+
+.terms-divider {
+  height: 1px;
+  background: #e0e0e0;
+  margin: 0 0 4px;
+}
+
+.terms-check-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.terms-checkbox {
+  display: none;
+}
+
+.terms-checkbox-custom {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid #bbb;
+  background: #fff;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.terms-checkbox:checked + .terms-checkbox-custom {
+  background: #111;
+  border-color: #111;
+}
+
+.terms-checkbox:checked + .terms-checkbox-custom::after {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 6px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) translateY(-1px);
+}
+
+.terms-check-label {
+  font-size: 13px;
+  color: #333;
+}
+
+.terms-check-label--all {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111;
+}
+
+.terms-all-desc {
+  font-size: 11px;
+  color: #999;
+  margin: 6px 0 0 28px;
+}
+
+.terms-list {
+  border: 1px solid #e0e0e0;
+  border-top: none;
+  margin-bottom: 8px;
+}
+
+.terms-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.terms-item:last-child {
+  border-bottom: none;
+}
+
+.terms-view-btn {
+  background: none;
+  border: 1px solid #ddd;
+  font-size: 11px;
+  color: #888;
+  cursor: pointer;
+  padding: 4px 10px;
+  flex-shrink: 0;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.terms-view-btn:hover {
+  color: #111;
+  border-color: #111;
+}
+
+.terms-content {
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 14px 18px;
+  font-size: 12px;
+  color: #555;
+  line-height: 1.8;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.terms-content.is-hidden {
+  display: none;
+}
+
+.terms-content p + p {
+  margin-top: 8px;
+}
+
+/* ── 모바일 ── */
+@media (max-width: 560px) {
+  .modal, .modal--wide {
+    padding: 32px 18px 24px;
+    width: calc(100vw - 32px);
+  }
+  .modal-title { font-size: 16px; }
+  .kakao-btn, .modal-input, .modal-submit-btn, .modal-tab { height: 44px; }
+  .modal-step-bar { gap: 4px; }
+  .modal-step { font-size: 11px; }
+  .addr-popup { max-width: calc(100vw - 32px); }
+}
+
+/* ── OTP 인증번호 입력 ── */
+.otp-input-wrap {
+  position: relative;
+  border: 1px solid #ddd;
+  margin-bottom: -1px;
+  display: flex;
+  align-items: center;
+}
+
+.otp-input-wrap .modal-input {
+  flex: 1;
+  border: none;
+  letter-spacing: 0.2em;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.otp-timer {
+  flex-shrink: 0;
+  padding: 0 14px;
+  font-size: 13px;
+  color: #e85c5c;
+  font-weight: 600;
+  white-space: nowrap;
+}

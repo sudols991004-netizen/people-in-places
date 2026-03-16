@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>People in Places - Admin</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/homgestyle.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <header class="header">
+    <div class="inner">
+      <button class="menu-btn" type="button" aria-label="Open menu">☰</button>
+      <nav class="nav nav-left">
+        <a href="about.html">About</a>
+        <a href="homepage.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="info.html">Info</a>
+      </nav>
+      <h1 class="logo">PEOPLE IN PLACES</h1>
+      <nav class="nav nav-right">
+        <a href="mypage.html">My page</a>
+      </nav>
+    </div>
+    <div class="mobile-menu">
+      <a href="about.html">About</a>
+      <a href="homepage.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="info.html">Info</a>
+      <a href="mypage.html">My page</a>
+    </div>
+  </header>
+
+  <main class="admin-page">
+    <div class="admin-inner">
+      <aside class="admin-sidebar">
+        <h2 class="admin-sidebar-title">관리자 페이지</h2>
+        <nav class="admin-side-nav">
+          <a href="#admin-products" class="admin-side-link is-active" data-section-link="admin-products">상품 관리</a>
+          <a href="#admin-notices" class="admin-side-link" data-section-link="admin-notices">공지 관리</a>
+          <a href="#admin-orders" class="admin-side-link" data-section-link="admin-orders">주문 관리</a>
+        </nav>
+      </aside>
+      <div class="admin-content">
+        <section class="admin-section" id="admin-products">
+          <div class="admin-box">
+            <div class="admin-box-head"><h3>상품 관리</h3><p>Shop / Homepage Gallery에 반영될 상품을 관리합니다.</p></div>
+            <form class="admin-form" id="productForm">
+              <div class="admin-form-grid">
+                <div class="form-row"><label for="productTitle">상품명</label><input type="text" id="productTitle" required></div>
+                <div class="form-row"><label for="productCategory">카테고리</label><select id="productCategory" required><option value="postcard">Postcard</option><option value="wallpaper">Wallpaper</option></select></div>
+                <div class="form-row"><label for="productPrice">가격</label><input type="number" id="productPrice" required></div>
+                <div class="form-row"><label for="productStatus">판매 상태</label><select id="productStatus" required><option value="active">판매중</option><option value="soldout">품절</option><option value="hidden">숨김</option></select></div>
+                <div class="form-row full"><label for="productThumbnail">썸네일 경로</label><input type="text" id="productThumbnail" placeholder="img/product-01.jpg" required></div>
+                <div class="form-row full"><label for="productDescription">설명</label><textarea id="productDescription" rows="4" placeholder="상품 설명을 입력하세요."></textarea></div>
+              </div>
+              <button type="submit" class="black-btn">상품 등록</button>
+            </form>
+            <div class="admin-list-wrap"><div class="admin-list-head"><h4>등록된 상품</h4></div><div class="admin-product-list" id="adminProductList"></div></div>
+          </div>
+        </section>
+        <section class="admin-section" id="admin-notices">
+          <div class="admin-box">
+            <div class="admin-box-head"><h3>공지 관리</h3><p>Info 페이지 공지 데이터를 관리합니다.</p></div>
+            <form class="admin-form" id="noticeForm">
+              <div class="admin-form-grid">
+                <div class="form-row full"><label for="noticeTitle">공지 제목</label><input type="text" id="noticeTitle" required></div>
+                <div class="form-row"><label for="noticeCategory">분류</label><select id="noticeCategory" required><option value="notice">공지</option><option value="event">이벤트</option><option value="shipping">배송</option></select></div>
+                <div class="form-row"><label for="noticeAuthor">작성자</label><input type="text" id="noticeAuthor" value="관리자" required></div>
+                <div class="form-row full"><label for="noticeContent">내용</label><textarea id="noticeContent" rows="6" required></textarea></div>
+              </div>
+              <button type="submit" class="black-btn">공지 등록</button>
+            </form>
+            <div class="admin-list-wrap"><div class="admin-list-head"><h4>등록된 공지</h4></div><div class="admin-notice-list" id="adminNoticeList"></div></div>
+          </div>
+        </section>
+        <section class="admin-section" id="admin-orders">
+          <div class="admin-box">
+            <div class="admin-box-head"><h3>주문 관리</h3><p>주문 상태를 변경할 수 있습니다.</p></div>
+            <div class="admin-order-list" id="adminOrderList"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="inner footer-inner">
+      <h2>PEOPLE IN PLACES</h2>
+      <div class="footer-links">
+        <a href="#">이용약관</a>
+        <a href="#">개인정보처리방침</a>
+      </div>
+      <div class="footer-info">
+        <p>퍼플인플레이스(PEOPLE IN PLACES) 사업자정보 통신판매신고번호</p>
+        <p>CEO 이수현 ADDRESS 경기도 하남시 하남대로 895 전화번호 010-8356-0850 이메일 sudojs091004@gmail.com</p>
+        <p>CONTACT 인스타그램 @people_in_places</p>
+      </div>
+      <p class="copyright">Copyright moondueg all rights reserved</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/userService.js"></script>
+  <script src="js/productService.js"></script>
+  <script src="js/noticeService.js"></script>
+  <script src="js/orderService.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

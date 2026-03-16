@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>People in Places</title>
+
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/homgestyle.css">
+</head>
+
+<body>
+  <header class="header">
+    <div class="inner">
+      <button class="menu-btn" type="button" aria-label="Open menu">☰</button>
+
+      <nav class="nav nav-left">
+        <a href="about.html">About</a>
+        <a href="homepage.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="info.html">Info</a>
+      </nav>
+
+      <h1 class="logo">PEOPLE IN PLACES</h1>
+
+      <nav class="nav nav-right">
+        <a href="login.html">Login</a>
+        <a href="mypage.html">My page</a>
+        <a href="admin.html" id="adminMenuLink" style="display: none;">Admin</a>
+      </nav>
+    </div>
+
+    <div class="mobile-menu">
+      <a href="homepage.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="shop.html">Shop</a>
+      <a href="info.html">Info</a>
+      <a href="login.html">Login</a>
+      <a href="mypage.html">My page</a>
+      <a href="admin.html" id="mobileAdminMenuLink" style="display: none;">Admin</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero reveal">
+      <div class="hero-image-wrap">
+        <img src="img/kamo.jpg" alt="People in Places main image">
+
+        <div class="hero-overlay">
+          <h2>PEOPLE IN PLACES</h2>
+          <p>
+            당신의 이야기를 PEOPLE IN PLACES와 함께 특별하게 보관해보세요. <br>
+            PEOPLE IN PLACES는 당신의 이야기가 누군가에겐 힘이 될 수 있도록 도와줍니다.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="intro section reveal">
+      <div class="inner intro-layout">
+        <div class="intro-title">
+          <h2>@moon_dueg_</h2>
+        </div>
+
+        <div class="intro-text">
+          <p>
+            비영리 매거진 PEOPLE IN PLACES는 <br>
+            당신의 이야기에 힘이 있다고 믿습니다. <br>
+            @moon_dueg_의 프로젝트를 통해 당신의 이야기로 누군가를 도와줘보세요.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section gallery-section reveal">
+      <div class="inner">
+        <h2 class="section-title">Wallpaper</h2>
+
+        <div class="gallery-slider" data-slider>
+          <button class="slider-btn prev" type="button" aria-label="Previous image" data-prev>&#10094;</button>
+
+          <div class="gallery-viewport">
+            <div class="gallery-track" id="wallpaperTrack"></div>
+          </div>
+
+          <button class="slider-btn next" type="button" aria-label="Next image" data-next>&#10095;</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section gallery-section reveal">
+      <div class="inner">
+        <h2 class="section-title">Postcard</h2>
+
+        <div class="gallery-slider" data-slider>
+          <button class="slider-btn prev" type="button" aria-label="Previous image" data-prev>&#10094;</button>
+
+          <div class="gallery-viewport">
+            <div class="gallery-track" id="postcardTrack"></div>
+          </div>
+
+          <button class="slider-btn next" type="button" aria-label="Next image" data-next>&#10095;</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="feature section reveal">
+      <div class="inner feature-layout">
+        <div class="feature-image">
+          <img src="img/img last.JPG" alt="People in Places featured image">
+        </div>
+
+        <div class="feature-text">
+          <h3>PEOPLE IN PLACES</h3>
+          <p>
+            소중한 기억들과 당신의 이야기는 <br>
+            어쩌면 누군가에게 힘이 되어줄 수 있습니다. <br>
+            PEOPLE IN PLACES는 비영리 매거진으로 <br>
+            여러분과 자선단체를 이어주는 역할을 수행합니다. <br>
+            @moon_dueg_의 작품들과 함께 <br>
+            세상에 따뜻한 힘이 되어주세요.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer reveal">
+    <div class="inner footer-inner">
+      <h2>PEOPLE IN PLACES</h2>
+
+      <div class="footer-links">
+        <a href="#">이용약관</a>
+        <a href="#">개인정보처리방침</a>
+      </div>
+
+      <div class="footer-info">
+        <p>퍼플인플레이스(PEOPLE IN PLACES) 사업자정보 통신판매신고번호</p>
+        <p>CEO 이수현 ADDRESS 경기도 하남시 하남대로 895 전화번호 010-8356-0850 이메일 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0f7c7a6b60657c3f363e3f3f3b4f68626e6663216c6062">[email&#160;protected]</a></p>
+        <p>CONTACT 인스타그램 @people_in_places</p>
+      </div>
+
+      <p class="copyright">Copyright moondueg all rights reserved</p>
+    </div>
+  </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/userService.js"></script>
+  <script src="js/productService.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/homepage.js"></script>
+</body>
+</html>
