@@ -1,9 +1,9 @@
 import "@supabase/functions-js/edge-runtime.d.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 
-const SOLAPI_API_KEY    = 'NCSOMI95NXYQBJJX';
-const SOLAPI_API_SECRET = 'DOL0XCS6KG4BCJQYBEPOA588J5THTH4Z';
-const SENDER_PHONE      = '01083560850';
+const SOLAPI_API_KEY    = Deno.env.get('SOLAPI_API_KEY')    ?? '';
+const SOLAPI_API_SECRET = Deno.env.get('SOLAPI_API_SECRET') ?? '';
+const SENDER_PHONE      = Deno.env.get('SENDER_PHONE')      ?? '';
 
 const SUPABASE_URL      = 'https://kracfwphcfoxsapwauyh.supabase.co';
 const SUPABASE_SERVICE_KEY = Deno.env.get('SERVICE_ROLE_KEY') ?? '';
