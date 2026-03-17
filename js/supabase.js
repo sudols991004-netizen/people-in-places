@@ -12,10 +12,5 @@ var _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,
-    lock: {
-      acquire: async (name, acquireLockFn) => {
-        return acquireLockFn();
-      }
-    }
   }
 });
