@@ -9,21 +9,36 @@ const userService = {
   _currentProfile: null,
 
   async init() {
+  try {
     const { data: { session } } = await _supabase.auth.getSession();
     if (session?.user) {
       this._currentUser = session.user;
       await this._loadProfile(session.user.id);
     }
-    _supabase.auth.onAuthStateChange(async (event, session) => {
+  } catch (e) {
+    // lock 에러 발생 시 잠시 후 재시도
+    await new Promise(r => setTimeout(r, 300));
+    try {
+      const { data: { session } } = await _supabase.auth.getSession();
       if (session?.user) {
         this._currentUser = session.user;
         await this._loadProfile(session.user.id);
-      } else {
-        this._currentUser    = null;
-        this._currentProfile = null;
       }
-    });
-  },
+    } catch (e2) {
+      console.warn('세션 초기화 실패:', e2);
+    }
+  }
+
+  _supabase.auth.onAuthStateChange(async (event, session) => {
+    if (session?.user) {
+      this._currentUser = session.user;
+      await this._loadProfile(session.user.id);
+    } else {
+      this._currentUser    = null;
+      this._currentProfile = null;
+    }
+  });
+},
 
   async _loadProfile(userId) {
     const { data } = await _supabase
