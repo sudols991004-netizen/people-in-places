@@ -36,13 +36,18 @@ function toggleAdminMenu() {
   if (mobileLink)  mobileLink.style.display  = isAdmin ? 'block'        : 'none';
 }
 
+// ✅ 이슈 2 수정: Login → Logout 전환
+// login.html 페이지 자체는 모달 방식이므로 제외
 function updateLoginNavLink() {
-  const isLoggedIn = userService.isLoggedIn();
-  const allLoginLinks = document.querySelectorAll('a[href="login.html"]');
-  allLoginLinks.forEach(function (link) {
+  const isLoggedIn  = userService.isLoggedIn();
+  const isLoginPage = window.location.pathname.includes('login.html');
+  if (isLoginPage) return;
+
+  document.querySelectorAll('a[href="login.html"]').forEach(function (link) {
     if (isLoggedIn) {
       link.textContent = 'Logout';
-      link.href = '#';
+      link.removeAttribute('href');
+      link.style.cursor = 'pointer';
       const newLink = link.cloneNode(true);
       newLink.addEventListener('click', async function (e) {
         e.preventDefault();
@@ -57,10 +62,11 @@ function updateLoginNavLink() {
   });
 }
 
+// login.html이 아닌 페이지에서 Login 링크 클릭 시 return URL 저장
+// updateLoginNavLink() 이후 실행 → Logout으로 바뀐 링크(href 없음)는 자동 제외
 function initLoginLinks() {
   if (window.location.pathname.includes('login.html')) return;
-  const loginLinks = document.querySelectorAll('a[href="login.html"]');
-  loginLinks.forEach(function (link) {
+  document.querySelectorAll('a[href="login.html"]').forEach(function (link) {
     link.addEventListener('click', function (e) {
       e.preventDefault();
       sessionStorage.setItem('pip_return_url', window.location.href);
@@ -77,8 +83,6 @@ async function initCommon() {
   updateLoginNavLink();
   initLoginLinks();
 
-  // ✅ userService.init() 완료 후 pip:ready 이벤트 발행
-  // 각 페이지 JS는 이 이벤트를 받은 후 실행 → 타이밍 충돌 해결
   window.dispatchEvent(new CustomEvent('pip:ready'));
 }
 
