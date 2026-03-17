@@ -96,11 +96,11 @@
 
   .about-hero-text h2 {
     margin-bottom: 14px;
-    font-size: 28px;
+    font-size: 14px;
   }
 
   .about-hero-text p {
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.6;
   }
 
@@ -110,7 +110,7 @@
 
   .about-copy p {
     margin-bottom: 12px;
-    font-size: 13px;
+    font-size: 10px;
     line-height: 1.8;
   }
 }
