@@ -1,7 +1,8 @@
 // ============================================================
 // login.js
 // 회원가입: 약관 → 휴대폰인증 → 계정설정 → 배송지 → 완료 (5단계)
-// 비밀번호찾기: 휴대폰인증 → 새비밀번호 → 완료 (3단계)
+// 비밀번호찾기: 휴대폰인증 → 이메일 재설정 링크 발송
+// ✅ 수정: 비밀번호찾기 휴대폰 인증 후 회원정보 조회 → 링크 발송 흐름 개선
 // ============================================================
 
 const backdrop        = document.getElementById('modalBackdrop');
@@ -43,6 +44,7 @@ function validatePassword(pw) {
   return null;
 }
 
+// ✅ 수정: phone을 010-XXXX-XXXX 형태로 정규화
 function normalizePhone(phone) {
   var digits = phone.replace(/\D/g, '');
   if (digits.length === 11 && digits.startsWith('010')) {
@@ -176,7 +178,6 @@ document.getElementById('termsAgreeBtn').addEventListener('click', function () {
 var regDraft = {};
 var regPhoneVerified = false;
 
-// showRegStep: 0~4
 function showRegStep(step) {
   [0,1,2,3,4].forEach(function(n) {
     var panel  = document.getElementById('regStep' + n);
@@ -309,9 +310,6 @@ document.getElementById('regForm2').addEventListener('submit', async function (e
 
   if (!result.success) { setError('reg3Error', result.message); return; }
 
-  // OTP 발송 성공 시 바로 완료 화면으로 (이메일 OTP 입력 불필요)
-  // Supabase가 이메일 인증 없이 가입을 허용하는 경우:
-  // - Supabase 대시보드 > Auth > Settings > "Enable email confirmations" 비활성화 필요
   setError('reg3Error', '');
   showRegStep(4);
 });
@@ -343,7 +341,6 @@ document.getElementById('backToLoginBtn').addEventListener('click', function () 
 
 // ── 아이디/비밀번호 찾기 ────────────────────────────────────
 
-// 휴대폰 인증 완료 여부 플래그 (이게 true여야만 비밀번호 변경 가능)
 var findPwPhoneVerified = false;
 
 function resetFindModal() {
@@ -354,64 +351,22 @@ function resetFindModal() {
   var idPanel = document.getElementById('findIdPanel');
   if (idPanel) idPanel.classList.remove('is-hidden');
 
-  // 비밀번호 찾기 초기 상태로
   var fpwStep1 = document.getElementById('findPwStep1');
   if (fpwStep1) fpwStep1.style.display = 'block';
 
-  // 입력값 전부 초기화
-  ['findPwPhone','findPwPhoneOtp','findPwNew','findPwNewConfirm','findIdName','findIdPhone'].forEach(function(id) {
+  ['findPwPhone','findPwPhoneOtp','findIdName','findIdPhone'].forEach(function(id) {
     var el = document.getElementById(id); if (el) el.value = '';
   });
-  // 인증번호 입력창 숨기기
   var fpw = document.getElementById('findPwPhoneOtpWrap');
   if (fpw) fpw.style.display = 'none';
-  // 인증 확인 버튼 비활성화
   var vbtn = document.getElementById('verifyFindPwPhoneBtn');
   if (vbtn) vbtn.disabled = true;
-  // 발송 버튼 텍스트 초기화
   var sendBtn = document.getElementById('sendFindPwPhoneOtpBtn');
   if (sendBtn) { sendBtn.disabled = false; sendBtn.textContent = '인증번호 발송'; }
-  // 완료 화면 숨기기
-  var completeEl = document.getElementById('findPwComplete');
-  if (completeEl) completeEl.style.display = 'none';
-  // 아이디 찾기 결과 숨기기
   var resultEl = document.getElementById('findIdResult');
   if (resultEl) resultEl.classList.add('is-hidden');
-  // 인증 플래그 초기화
   findPwPhoneVerified = false;
-}
-
-// step 표시 제어 (1단계만 — 2단계는 별도 모달)
-function showFindPwStep(step) {
-  if (step === 2) {
-    // 2단계: 새 비밀번호 모달로 전환
-    findModal.classList.remove('is-open');
-    findPwNewModal.classList.add('is-open');
-    // 새 비밀번호 입력창 초기화
-    var step2El = document.getElementById('findPwStep2');
-    var completeEl = document.getElementById('findPwComplete');
-    if (step2El)    step2El.style.display = 'block';
-    if (completeEl) completeEl.style.display = 'none';
-    setError('findPwNewErr', '');
-    var newPwEl = document.getElementById('findPwNew');
-    var confirmEl = document.getElementById('findPwNewConfirm');
-    if (newPwEl)   newPwEl.value = '';
-    if (confirmEl) confirmEl.value = '';
-    return;
-  }
-  // step1 표시 (findModal 내)
-  var el = document.getElementById('findPwStep1');
-  if (el) el.style.display = 'block';
-  var completeEl = document.getElementById('findPwComplete');
-  if (completeEl) completeEl.style.display = 'none';
-}
-
-// 완료 화면만 표시
-function showFindPwComplete() {
-  var step2El = document.getElementById('findPwStep2');
-  var completeEl = document.getElementById('findPwComplete');
-  if (step2El)    step2El.style.display = 'none';
-  if (completeEl) completeEl.style.display = 'block';
+  clearErrors();
 }
 
 // 탭 전환
@@ -455,7 +410,8 @@ document.getElementById('findIdForm').addEventListener('submit', async function 
   btn.disabled = false; btn.textContent = '아이디 찾기';
 });
 
-// ── 비밀번호 찾기 step1: 휴대폰 인증 ──────────────────────────
+// ── 비밀번호 찾기: 휴대폰 인증 ──────────────────────────────
+// ✅ 이슈 1 수정: 휴대폰 인증 성공 → DB에서 이메일 조회 → 재설정 링크 발송
 var sendFindPwPhoneOtpBtn = document.getElementById('sendFindPwPhoneOtpBtn');
 var verifyFindPwPhoneBtn  = document.getElementById('verifyFindPwPhoneBtn');
 var findPwPhoneOtpWrap    = document.getElementById('findPwPhoneOtpWrap');
@@ -465,6 +421,19 @@ sendFindPwPhoneOtpBtn.addEventListener('click', async function () {
   var phoneError = validatePhone(phone);
   if (phoneError) { setError('findPwPhoneErr', phoneError); return; }
 
+  // ✅ 먼저 DB에서 해당 번호가 등록된 회원인지 확인
+  var normalizedPhone = normalizePhone(phone);
+  var rawDigits = phone.replace(/\D/g, '');
+
+  // 두 가지 형식으로 조회 시도 (010-XXXX-XXXX 또는 01012345678)
+  var email = await userService.findByPhone(normalizedPhone);
+  if (!email) email = await userService.findByPhone(rawDigits);
+
+  if (!email) {
+    setError('findPwPhoneErr', '해당 휴대폰 번호로 가입된 계정이 없습니다. 번호를 확인해주세요.');
+    return;
+  }
+
   setError('findPwPhoneErr', '');
   this.disabled = true; this.textContent = '발송 중...';
 
@@ -472,7 +441,7 @@ sendFindPwPhoneOtpBtn.addEventListener('click', async function () {
     var res = await fetch('https://kracfwphcfoxsapwauyh.supabase.co/functions/v1/send-sms', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtyYWNmd3BoY2ZveHNhcHdhdXloIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1NDI1MzYsImV4cCI6MjA4OTExODUzNn0.RDDU30twemaRzGbhfdEs20BsfRf3jiqv3irRwpE-bi8' },
-      body: JSON.stringify({ action: 'send', phone: phone.replace(/\D/g, '') }),
+      body: JSON.stringify({ action: 'send', phone: rawDigits }),
     });
     var data = await res.json();
     if (!data.success) {
@@ -492,16 +461,22 @@ sendFindPwPhoneOtpBtn.addEventListener('click', async function () {
   document.getElementById('findPwPhoneOtp').value = '';
   document.getElementById('findPwPhoneOtp').focus();
   startOtpTimer('findPwPhoneOtpTimer', 180);
-  setError('findPwPhoneErr', '휴대폰으로 인증번호가 발송되었습니다.');
+  setError('findPwPhoneErr', '인증번호가 발송되었습니다.');
+
+  // 찾은 이메일을 임시 저장 (verify 단계에서 사용)
+  verifyFindPwPhoneBtn.dataset.email = email;
+  verifyFindPwPhoneBtn.dataset.phone = rawDigits;
 });
 
 document.getElementById('findPwPhoneForm').addEventListener('submit', async function (e) {
   e.preventDefault();
   var otp   = document.getElementById('findPwPhoneOtp').value.trim();
-  var phone = document.getElementById('findPwPhone').value.trim();
   var btn   = document.getElementById('verifyFindPwPhoneBtn');
+  var email = btn.dataset.email || '';
+  var phone = btn.dataset.phone || document.getElementById('findPwPhone').value.replace(/\D/g, '');
 
   if (!otp) { setError('findPwPhoneErr', '인증번호를 입력해주세요.'); return; }
+  if (!email) { setError('findPwPhoneErr', '먼저 인증번호를 발송해주세요.'); return; }
 
   btn.disabled = true; btn.textContent = '확인 중...';
 
@@ -509,7 +484,7 @@ document.getElementById('findPwPhoneForm').addEventListener('submit', async func
     var res = await fetch('https://kracfwphcfoxsapwauyh.supabase.co/functions/v1/send-sms', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtyYWNmd3BoY2ZveHNhcHdhdXloIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1NDI1MzYsImV4cCI6MjA4OTExODUzNn0.RDDU30twemaRzGbhfdEs20BsfRf3jiqv3irRwpE-bi8' },
-      body: JSON.stringify({ action: 'verify', phone: phone.replace(/\D/g, ''), code: otp }),
+      body: JSON.stringify({ action: 'verify', phone: phone, code: otp }),
     });
     var data = await res.json();
 
@@ -527,22 +502,17 @@ document.getElementById('findPwPhoneForm').addEventListener('submit', async func
   btn.disabled = false; btn.textContent = '인증 확인';
   setError('findPwPhoneErr', '');
 
-  // ── 휴대폰 번호로 이메일 조회 후 재설정 링크 발송 ──
-  var normalizedPhone = normalizePhone(phone);
-  var email = await userService.findByPhone(normalizedPhone);
-
-  if (!email) {
-    setError('findPwPhoneErr', '해당 휴대폰 번호로 가입된 계정을 찾을 수 없습니다.');
-    return;
-  }
-
+  // ✅ 인증 성공 → 재설정 이메일 발송
+  btn.disabled = true; btn.textContent = '이메일 발송 중...';
   var resetResult = await userService.sendPasswordResetEmail(email);
+  btn.disabled = false; btn.textContent = '인증 확인';
+
   if (!resetResult.success) {
-    setError('findPwPhoneErr', '이메일 발송에 실패했습니다: ' + resetResult.message);
+    setError('findPwPhoneErr', '이메일 발송에 실패했습니다: ' + (resetResult.message || ''));
     return;
   }
 
-  // 성공 → 이메일 발송 완료 모달로 전환
+  // 성공 → 완료 모달로 전환
   findModal.classList.remove('is-open');
   findPwNewModal.classList.add('is-open');
 });
