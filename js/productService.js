@@ -69,4 +69,18 @@ const productService = {
     if (error) { console.error('상품 수정 실패:', error); return null; }
     return data;
   },
+
+  // 수량(stock) 업데이트 — admin에서 호출
+  async updateStock(id, stock) {
+    const stockNum = Number(stock);
+    const newStatus = stockNum <= 0 ? 'soldout' : 'active';
+    const { data, error } = await _supabase
+      .from('products')
+      .update({ stock: stockNum, status: newStatus })
+      .eq('id', id)
+      .select()
+      .single();
+    if (error) { console.error('재고 수정 실패:', error); return null; }
+    return data;
+  },
 };
