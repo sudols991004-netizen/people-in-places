@@ -364,3 +364,19 @@
     line-height: 1.7;
   }
 }
+/* ── 상품 카드 배송비 & 재고 표기 ── */
+.product-shipping {
+  margin-top: 3px;
+  font-size: 11px;
+  color: #888;
+}
+
+.product-stock-badge {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  padding: 4px 8px;
+  font-size: 10px;
+  background: rgba(200, 0, 0, 0.8);
+  color: #fff;
+}
