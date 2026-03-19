@@ -43,6 +43,7 @@ const orderService = {
         user_id:       orderData.userId,
         status:        'paid',
         total_price:   orderData.totalPrice,
+        shipping_fee:  orderData.shippingFee  || 0,
         shipping_info: orderData.shippingInfo || {},
         order_date:    new Date().toISOString().slice(0, 10),
       })
@@ -86,6 +87,7 @@ function normalizeOrder(order) {
   return {
     ...order,
     totalPrice:   order.total_price,
+    shippingFee:  order.shipping_fee  || 0,
     orderDate:    order.order_date,
     shippingInfo: order.shipping_info,
     items:        (order.order_items || []).map(item => ({
