@@ -2,7 +2,8 @@
 // order.js — 토스페이먼츠 v2 연동
 // ============================================================
 
-const TOSS_CLIENT_KEY = 'test_ck_6bJXmgo28ew2NMPx6l4YVLAnGKWx';
+const TOSS_CLIENT_KEY   = 'test_ck_6bJXmgo28ew2NMPx6l4YVLAnGKWx';
+const POSTCARD_SHIPPING = 3000;
 
 function formatPrice(price) {
   return Number(price || 0).toLocaleString('ko-KR') + '원';
@@ -38,6 +39,12 @@ function renderOrderSummary(draft) {
   const finalPriceEl = document.getElementById('summaryFinalPrice');
   if (!container) return;
 
+  const isPostcard  = (draft.category || '').toLowerCase() === 'postcard';
+  const shippingFee = draft.shippingFee != null ? draft.shippingFee : (isPostcard ? POSTCARD_SHIPPING : 0);
+  const itemTotal   = draft.price * draft.quantity;
+  // totalPrice가 이미 배송비 포함된 경우 그대로 사용, 아니면 계산
+  const finalTotal  = draft.totalPrice || (itemTotal + shippingFee);
+
   container.innerHTML = `
     <div class="order-product-card">
       <div class="order-product-thumb">
@@ -46,12 +53,19 @@ function renderOrderSummary(draft) {
       <div>
         <p class="order-product-title">${draft.title}</p>
         <p class="order-product-meta">수량 ${draft.quantity}개<br>단가 ${formatPrice(draft.price)}</p>
+        ${isPostcard ? `<p class="order-product-meta" style="margin-top:4px;color:#c00;">배송비 ${formatPrice(shippingFee)} 포함</p>` : ''}
       </div>
     </div>
   `;
-  if (itemPriceEl)  itemPriceEl.textContent  = formatPrice(draft.price);
+  if (itemPriceEl)  itemPriceEl.textContent  = formatPrice(itemTotal);
   if (quantityEl)   quantityEl.textContent   = `${draft.quantity}개`;
-  if (finalPriceEl) finalPriceEl.textContent = formatPrice(draft.totalPrice);
+  if (finalPriceEl) finalPriceEl.textContent = formatPrice(finalTotal);
+
+  // 배송비 행 표시 (Postcard만)
+  const shippingRow = document.getElementById('summaryShippingRow');
+  const shippingEl  = document.getElementById('summaryShipping');
+  if (shippingRow) shippingRow.style.display = isPostcard ? 'flex' : 'none';
+  if (shippingEl && isPostcard)  shippingEl.textContent = formatPrice(shippingFee);
 }
 
 function fillOrderFormUserInfo() {
@@ -111,7 +125,7 @@ async function requestTossPayment(draft) {
     method: 'CARD',
     amount: {
       currency: 'KRW',
-      value: Number(draft.totalPrice),
+      value: Number(draft.totalPrice || draft.price * draft.quantity + (((draft.category||'').toLowerCase() === 'postcard') ? POSTCARD_SHIPPING : 0)),
     },
     orderId,
     orderName: draft.title,
