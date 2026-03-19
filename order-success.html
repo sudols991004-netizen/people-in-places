@@ -130,10 +130,15 @@
 
       const pending = JSON.parse(pendingRaw);
 
+      // 배송비 계산
+      const isPostcard  = (pending.draft.category || '').toLowerCase() === 'postcard';
+      const shippingFee = pending.draft.shippingFee != null ? pending.draft.shippingFee : (isPostcard ? 3000 : 0);
+
       // 결제 정보 화면에 표시
       infoEl.innerHTML = `
         <p>주문번호: <strong>${orderId}</strong></p>
         <p>상품명: <strong>${pending.draft.title}</strong></p>
+        ${isPostcard ? `<p>배송비: <strong>3,000원 포함</strong></p>` : ''}
         <p>결제금액: <strong>${Number(amount).toLocaleString('ko-KR')}원</strong></p>
         <p>주문자: <strong>${pending.shippingInfo.recipient}</strong></p>
       `;
@@ -151,6 +156,7 @@
           category:  pending.draft.category || '',
         }],
         totalPrice:   Number(amount),
+        shippingFee:  pending.draft.shippingFee || 0,
         shippingInfo: pending.shippingInfo,
         paymentKey,
         orderId,
