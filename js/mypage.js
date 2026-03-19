@@ -104,8 +104,18 @@ function renderOrderDetail(order) {
   setEl('detailPhone',     order.shippingInfo?.phone     || '-');
   setEl('detailEmail',     order.shippingInfo?.email     || '-');
   setEl('detailAddress',   order.shippingInfo?.address   || '-');
-  setEl('detailItemPrice', formatPrice(order.totalPrice));
+  const firstItem   = order.items?.[0];
+  const isPostcard  = (firstItem?.category || '').toLowerCase() === 'postcard';
+  const shippingFee = isPostcard ? 3000 : 0;
+  const itemsTotal  = isPostcard ? order.totalPrice - shippingFee : order.totalPrice;
+  setEl('detailItemPrice',  formatPrice(itemsTotal > 0 ? itemsTotal : order.totalPrice));
   setEl('detailFinalPrice', formatPrice(order.totalPrice));
+
+  // 배송비 행 표시
+  const shippingRow = document.getElementById('detailShippingRow');
+  const shippingEl  = document.getElementById('detailShippingFee');
+  if (shippingRow) shippingRow.style.display = isPostcard ? 'flex' : 'none';
+  if (shippingEl && isPostcard) shippingEl.textContent = formatPrice(shippingFee);
 
   // 주문 상품 목록
   const productEl = document.getElementById('orderDetailProduct');
