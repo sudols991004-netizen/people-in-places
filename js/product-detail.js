@@ -2,6 +2,8 @@
 // product-detail.js — pip:ready 이벤트 후 실행 (타이밍 보장)
 // ============================================================
 
+const POSTCARD_SHIPPING = 3000; // Postcard 배송비
+
 function formatPrice(price) {
   return Number(price || 0).toLocaleString('ko-KR') + '원';
 }
@@ -29,7 +31,26 @@ function createEmptyDetail() {
 function createProductDetail(product) {
   const category    = product.category || '';
   const isSoldout   = product.status === 'soldout';
+  const isPostcard  = category.toLowerCase() === 'postcard';
   const description = product.description || '상품 설명이 아직 등록되지 않았습니다.';
+  const stock       = product.stock != null ? product.stock : null;
+
+  // Postcard: 재고 표시 / 배송비 안내
+  const stockInfo = isPostcard && stock !== null
+    ? `<p class="product-detail-stock">남은 수량: <strong>${stock}개</strong></p>`
+    : '';
+
+  const shippingInfo = isPostcard
+    ? `<div class="product-detail-shipping">
+        <span class="shipping-label">배송비</span>
+        <span class="shipping-value">${formatPrice(POSTCARD_SHIPPING)} (우편 발송)</span>
+      </div>
+      <p class="shipping-notice">※ Postcard는 실물 상품으로 배송비 ${formatPrice(POSTCARD_SHIPPING)}이 추가됩니다.</p>`
+    : `<div class="product-detail-shipping">
+        <span class="shipping-label">배송</span>
+        <span class="shipping-value">디지털 파일 다운로드 (배송비 없음)</span>
+      </div>`;
+
   return `
     <div class="product-detail-layout">
       <div class="product-detail-image-wrap">
@@ -40,7 +61,9 @@ function createProductDetail(product) {
         <h2 class="product-detail-title">${product.title}</h2>
         <p class="product-detail-price">${formatPrice(product.price)}</p>
         ${createStatusBadge(product)}
+        ${stockInfo}
         <div class="product-detail-desc">${description}</div>
+        ${shippingInfo}
         <div class="product-detail-control">
           <div class="detail-row">
             <span class="detail-row-label">수량</span>
@@ -50,9 +73,14 @@ function createProductDetail(product) {
               <button type="button" class="quantity-btn" data-qty-plus ${isSoldout ? 'disabled' : ''}>+</button>
             </div>
           </div>
+          ${isPostcard ? `
+          <div class="detail-row">
+            <span class="detail-row-label">배송비</span>
+            <span id="detailShipping">${formatPrice(POSTCARD_SHIPPING)}</span>
+          </div>` : ''}
           <div class="detail-row detail-total">
             <span class="detail-row-label">총 금액</span>
-            <strong id="detailTotalPrice">${formatPrice(product.price)}</strong>
+            <strong id="detailTotalPrice">${formatPrice(product.price + (isPostcard ? POSTCARD_SHIPPING : 0))}</strong>
           </div>
           <div class="detail-button-group">
             <button type="button" class="white-btn" id="backToShopBtn">목록으로</button>
@@ -66,25 +94,32 @@ function createProductDetail(product) {
   `;
 }
 
-function updateDetailTotalPrice(unitPrice, quantity) {
+function updateDetailTotalPrice(unitPrice, quantity, isPostcard) {
+  const shipping = isPostcard ? POSTCARD_SHIPPING : 0;
   const el = document.getElementById('detailTotalPrice');
-  if (el) el.textContent = formatPrice(unitPrice * quantity);
+  if (el) el.textContent = formatPrice(unitPrice * quantity + shipping);
 }
 
 function initQuantityControl(product) {
-  const minusBtn = document.querySelector('[data-qty-minus]');
-  const plusBtn  = document.querySelector('[data-qty-plus]');
-  const input    = document.getElementById('detailQuantity');
+  const minusBtn  = document.querySelector('[data-qty-minus]');
+  const plusBtn   = document.querySelector('[data-qty-plus]');
+  const input     = document.getElementById('detailQuantity');
+  const isPostcard = (product.category || '').toLowerCase() === 'postcard';
+  const maxQty    = isPostcard && product.stock != null ? product.stock : Infinity;
   if (!minusBtn || !plusBtn || !input) return;
   const getQty = () => Number(input.value) || 1;
   minusBtn.addEventListener('click', () => {
     const q = getQty();
-    if (q > 1) { input.value = q - 1; updateDetailTotalPrice(product.price, q - 1); }
+    if (q > 1) { input.value = q - 1; updateDetailTotalPrice(product.price, q - 1, isPostcard); }
   });
   plusBtn.addEventListener('click', () => {
-    const q = getQty() + 1;
-    input.value = q;
-    updateDetailTotalPrice(product.price, q);
+    const q = getQty();
+    if (isPostcard && q >= maxQty) {
+      alert(`재고가 ${maxQty}개까지만 구매 가능합니다.`);
+      return;
+    }
+    input.value = q + 1;
+    updateDetailTotalPrice(product.price, q + 1, isPostcard);
   });
 }
 
@@ -131,14 +166,18 @@ function initDetailButtons(product) {
         return;
       }
       const quantity   = Number(input?.value || 1);
+      const isPostcard  = (product.category || '').toLowerCase() === 'postcard';
+      const shipping    = isPostcard ? POSTCARD_SHIPPING : 0;
+      const unitPrice   = Number(product.price || 0);
       const orderDraft = {
-        productId:  product.id,
-        title:      product.title,
-        thumbnail:  product.thumbnail,
-        price:      Number(product.price || 0),
+        productId:    product.id,
+        title:        product.title,
+        thumbnail:    product.thumbnail,
+        price:        unitPrice,
         quantity,
-        totalPrice: Number(product.price || 0) * quantity,
-        category:   product.category || '',
+        shippingFee:  shipping,
+        totalPrice:   unitPrice * quantity + shipping,
+        category:     product.category || '',
       };
       localStorage.setItem('selectedProductOrder', JSON.stringify(orderDraft));
       window.location.href = 'order.html';
