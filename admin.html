@@ -52,6 +52,7 @@
                 <div class="form-row"><label for="productCategory">카테고리</label><select id="productCategory" required><option value="postcard">Postcard</option><option value="wallpaper">Wallpaper</option></select></div>
                 <div class="form-row"><label for="productPrice">가격</label><input type="number" id="productPrice" required></div>
                 <div class="form-row"><label for="productStatus">판매 상태</label><select id="productStatus" required><option value="active">판매중</option><option value="soldout">품절</option><option value="hidden">숨김</option></select></div>
+                <div class="form-row"><label for="productStock">재고 수량</label><input type="number" id="productStock" min="0" value="0" placeholder="Postcard 재고 입력 (Wallpaper=0)"></div>
                 <div class="form-row full"><label for="productThumbnail">썸네일 경로</label><input type="text" id="productThumbnail" placeholder="img/product-01.jpg" required></div>
                 <div class="form-row full"><label for="productDescription">설명</label><textarea id="productDescription" rows="4" placeholder="상품 설명을 입력하세요."></textarea></div>
               </div>
@@ -94,20 +95,13 @@
       </div>
       <div class="footer-info">
         <p>퍼플인플레이스(PEOPLE IN PLACES) 사업자정보 통신판매신고번호</p>
-        <p>CEO 이수현 ADDRESS 경기도 하남시 하남대로 895 전화번호 010-8356-0850 이메일 sudojs091004@gmail.com</p>
+        <p>CEO 이수현 ADDRESS 경기도 하남시 하남대로 895 전화번호 010-8356-0850 이메일 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f7848293989d84c7cec6c7c7c3b7909a969e9bd994989a">[email&#160;protected]</a></p>
         <p>CONTACT 인스타그램 @people_in_places</p>
       </div>
       <p class="copyright">Copyright moondueg all rights reserved</p>
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script src="js/supabase.js"></script>
-  <script src="js/userService.js"></script>
-  <script src="js/productService.js"></script>
-  <script src="js/noticeService.js"></script>
-  <script src="js/orderService.js"></script>
-  <script src="js/common.js"></script>
-  <script src="js/admin.js"></script>
-</body>
-</html>
+  <script src="js/userService.js"></script
