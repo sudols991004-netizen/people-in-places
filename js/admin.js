@@ -105,14 +105,17 @@ function initProductForm() {
     if (btn) btn.disabled = true;
 
     // ✅ 이슈 4 수정: featured 필드 추가
+    const category = document.getElementById('productCategory').value;
+    const stock    = Number(document.getElementById('productStock').value || 0);
     const result = await productService.create({
       title:       document.getElementById('productTitle').value.trim(),
-      category:    document.getElementById('productCategory').value,
+      category,
       price:       Number(document.getElementById('productPrice').value),
       status:      document.getElementById('productStatus').value,
       thumbnail:   document.getElementById('productThumbnail').value.trim(),
       description: document.getElementById('productDescription').value.trim(),
       featured:    true,
+      stock:       category === 'postcard' ? stock : 0,
     });
 
     if (btn) btn.disabled = false;
@@ -125,6 +128,7 @@ function initProductForm() {
     form.reset();
     document.getElementById('productCategory').value = 'postcard';
     document.getElementById('productStatus').value   = 'active';
+    document.getElementById('productStock').value    = '0';
     await renderProductList();
     alert('상품이 등록되었습니다.');
   });
