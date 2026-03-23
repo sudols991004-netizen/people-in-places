@@ -44,7 +44,7 @@ function closeAddrPopup() {
 }
 
 // ── 초기 실행 ─────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', async function () {
+async function loginPageInit() {
   await userService.init();
 
   var backdrop           = document.getElementById('modalBackdrop');
@@ -362,4 +362,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   if (loginSubmitBtn) loginSubmitBtn.disabled = true;
   openModal(loginModal);
-});
+}
+
+loginPageInit();
