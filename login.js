@@ -364,4 +364,4 @@ async function loginPageInit() {
   openModal(loginModal);
 }
 
-loginPageInit();
+document.addEventListener('DOMContentLoaded', function() { loginPageInit(); });
