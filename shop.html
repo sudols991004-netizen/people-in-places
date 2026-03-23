@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>People in Places - Product Detail</title>
+  <title>People in Places - Shop</title>
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/homgestyle.css">
-  <link rel="stylesheet" href="css/product-detail.css">
+  <link rel="stylesheet" href="css/shop.css">
 </head>
 <body>
   <header class="header">
@@ -36,33 +36,30 @@
     </div>
   </header>
 
-  <main class="product-detail-page">
-    <div class="product-detail-inner" id="productDetailContainer"></div>
-  </main>
-
-  <!-- 결제 모달 -->
-  <div class="payment-backdrop" id="paymentBackdrop"></div>
-  <div class="payment-modal" id="paymentModal" role="dialog" aria-modal="true">
-    <button class="payment-modal-close" id="payModalClose" type="button" aria-label="닫기">✕</button>
-    <h2 class="payment-modal-title">결제하기</h2>
-    <div class="payment-product-row">
-      <div class="payment-thumb"><img id="payModalThumb" src="" alt=""></div>
-      <div class="payment-product-info">
-        <p class="payment-product-category" id="payModalCategory"></p>
-        <p class="payment-product-title" id="payModalTitle"></p>
-        <p class="payment-product-qty">수량: <strong id="payModalQty"></strong></p>
-        <p class="payment-product-price" id="payModalPrice"></p>
+  <main class="shop-page">
+    <section class="shop-hero reveal">
+      <div class="shop-inner">
+        <h2 class="shop-title">PRODUCT</h2>
+        <div class="shop-category-tabs">
+          <button class="shop-tab is-active" type="button" data-filter="all">ALL</button>
+          <button class="shop-tab" type="button" data-filter="wallpaper">WALL PAPER</button>
+          <button class="shop-tab" type="button" data-filter="postcard">POSTCARD</button>
+        </div>
       </div>
-    </div>
-    <div class="payment-notice">
-      <p>⚠️ 현재 결제 시스템 연동 준비 중입니다.</p>
-      <p>주문 정보를 확인하고 주문서를 작성해주세요.</p>
-    </div>
-    <div class="payment-btn-group">
-      <button type="button" class="white-btn" id="payModalCancel">취소</button>
-      <button type="button" class="black-btn" id="payModalConfirm">주문서 작성하기</button>
-    </div>
-  </div>
+    </section>
+    <section class="shop-product-section reveal">
+      <div class="shop-inner">
+        <div class="shop-slider">
+          <div class="shop-product-list" id="shopProductList"></div>
+          <div class="shop-pagination">
+            <button class="page-arrow" type="button" aria-label="Previous page" data-shop-prev>&#10094;</button>
+            <div class="shop-page-numbers" id="shopPageNumbers"></div>
+            <button class="page-arrow" type="button" aria-label="Next page" data-shop-next>&#10095;</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <footer class="footer reveal">
     <div class="inner footer-inner">
@@ -72,13 +69,12 @@
         <a href="privacy.html">개인정보처리방침</a>
       </div>
       <div class="footer-info">
-        <p>피플인플레이시스(PEOPLE IN PLACES) 사업자정보 통신판매신고번호</p>
-        <p>CEO 이수현 ADDRESS 경기도 하남시 하남대로 895 전화번호 010-8356-0850 이메일 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6b181e0f0401185b525a5b5b5f2b0c060a020745080406">[email&#160;protected]</a></p>
-        <p>CONTACT 인스타그램 @people_in_places</p>
+        <p>피플인플레이시스(PEOPLE IN PLACES) &nbsp; 사업자정보 &nbsp; 통신판매신고번호</p>
+        <p>CEO 이수현 &nbsp; ADDRESS 경기도 하남시 하남대로 895 &nbsp; 전화번호 010-8356-0850 &nbsp; 이메일 sudols991004@gmail.com</p>
+        <p>CONTACT &nbsp; 인스타그램 @people_in_places</p>
       </div>
       <p class="copyright">Copyright moondueg all rights reserved</p>
     </div>
   </footer>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
- 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"><
