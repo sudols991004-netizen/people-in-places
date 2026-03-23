@@ -185,9 +185,38 @@ const userService = {
   async loginWithKakao() {
     const { error } = await _supabase.auth.signInWithOAuth({
       provider: 'kakao',
-      options: { redirectTo: window.location.origin + '/homepage.html' }
+      options: { redirectTo: window.location.origin + '/login.html?kakao=1' }
     });
     if (error) return { success: false, message: error.message };
+    return { success: true };
+  },
+
+  // 카카오 첫 로그인 여부 확인 (users 테이블에 프로필 없으면 신규)
+  async isKakaoNewUser() {
+    if (!this._currentUser) return false;
+    const { data } = await _supabase
+      .from('users').select('id, name, phone').eq('id', this._currentUser.id).maybeSingle();
+    // 프로필 없거나 이름/전화번호 미입력이면 신규
+    if (!data || !data.name || !data.phone) return true;
+    return false;
+  },
+
+  // 카카오 유저 배송지 저장 (upsert)
+  async saveKakaoProfile(profileData) {
+    if (!this._currentUser) return { success: false, message: '로그인 정보가 없습니다.' };
+    const kakaoName = this._currentUser.user_metadata?.name || this._currentUser.user_metadata?.full_name || '';
+    const kakaoEmail = this._currentUser.email || '';
+    const { error } = await _supabase.from('users').upsert({
+      id:       this._currentUser.id,
+      email:    kakaoEmail,
+      name:     profileData.name || kakaoName,
+      phone:    profileData.phone || '',
+      address:  profileData.address || '',
+      postcode: profileData.postcode || '',
+      role:     'user',
+    }, { onConflict: 'id' });
+    if (error) return { success: false, message: error.message };
+    await this._loadProfile(this._currentUser.id);
     return { success: true };
   },
 
