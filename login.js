@@ -356,6 +356,8 @@ document.addEventListener('DOMContentLoaded', async function () {
   if (params.get('admin') === '1') {
     var adminSection = document.getElementById('adminLoginSection');
     if (adminSection) adminSection.style.display = 'block';
+    var findBtnWrap = document.getElementById('findBtnWrap');
+    if (findBtnWrap) findBtnWrap.style.display = 'flex';
   }
 
   if (loginSubmitBtn) loginSubmitBtn.disabled = true;
