@@ -1,5 +1,8 @@
 // ============================================================
-// admin.js - 이슈 4,5 수정: 상품등록 featured 필드 추가, 전체 기능 점검
+// admin.js
+// ✅ 수정1: renderProductList — 이벤트 리스너 누적 버그 수정 (innerHTML 방식 유지, outerHTML 클론 제거)
+// ✅ 수정2: 재고 직접 수정 버튼 추가 (Postcard용)
+// ✅ 수정3: admin.html에 productService 스크립트 추가로 인한 undefined 오류 해소
 // ============================================================
 
 function formatPrice(price) {
@@ -12,7 +15,7 @@ function getStatusText(status) {
 
 function ensureAdminAccess() {
   if (!userService.isAdmin()) {
-    document.body.innerHTML = `
+    document.querySelector('.admin-page').innerHTML = `
       <div class="admin-guard">
         <h2>관리자만 접근할 수 있습니다.</h2>
         <p>현재 로그인한 계정은 관리자 권한이 없습니다.<br>관리자 계정으로 로그인한 뒤 다시 시도해주세요.</p>
@@ -57,31 +60,55 @@ function initAdminScrollSpy() {
 async function renderProductList() {
   const listEl = document.getElementById('adminProductList');
   if (!listEl) return;
+
+  // ✅ 로딩 표시
+  listEl.innerHTML = `<div class="admin-empty">불러오는 중...</div>`;
+
   const products = await productService.getAll();
+
   if (!products.length) {
     listEl.innerHTML = `<div class="admin-empty">등록된 상품이 없습니다.</div>`;
     return;
   }
-  listEl.innerHTML = products.slice().reverse().map((p) => `
-    <div class="admin-card">
-      <div class="admin-thumb-row">
-        <div class="admin-thumb"><img src="${p.thumbnail}" alt="${p.title}"></div>
-        <div>
-          <p class="admin-card-title">${p.title}</p>
-          <div class="admin-meta-list">
-            <span>카테고리: ${p.category || '-'}</span>
-            <span>가격: ${formatPrice(p.price)}</span>
-            <span>상태: ${p.status || 'active'}</span>
-            <span>홈 노출: ${p.featured ? '예' : '아니오'}</span>
+
+  // ✅ 최신순 정렬 (DB는 created_at ascending이므로 reverse)
+  const sorted = products.slice().reverse();
+
+  listEl.innerHTML = sorted.map((p) => {
+    const isPostcard = (p.category || '').toLowerCase() === 'postcard';
+    const stockHtml  = isPostcard
+      ? `<span>재고: <strong>${p.stock != null ? p.stock + '개' : '-'}</strong>
+           <input type="number" class="stock-input" data-product-stock-id="${p.id}"
+             value="${p.stock || 0}" min="0"
+             style="width:60px;border:1px solid #ddd;padding:2px 6px;font-size:11px;margin-left:6px;">
+           <button type="button" class="white-btn" data-stock-save="${p.id}"
+             style="height:24px;font-size:10px;padding:0 8px;margin-left:4px;">저장</button>
+         </span>`
+      : `<span>재고: 디지털 상품</span>`;
+    return `
+      <div class="admin-card">
+        <div class="admin-thumb-row">
+          <div class="admin-thumb"><img src="${p.thumbnail}" alt="${p.title}"></div>
+          <div>
+            <p class="admin-card-title">${p.title}</p>
+            <div class="admin-meta-list">
+              <span>카테고리: ${p.category || '-'}</span>
+              <span>가격: ${formatPrice(p.price)}</span>
+              <span>상태: ${p.status || 'active'}</span>
+              <span>홈 노출: ${p.featured ? '예' : '아니오'}</span>
+              ${stockHtml}
+            </div>
+            <p class="admin-card-sub">${p.description || ''}</p>
           </div>
-          <p class="admin-card-sub">${p.description || ''}</p>
-        </div>
-        <div class="admin-card-actions">
-          <button type="button" class="white-btn" data-product-delete="${p.id}">삭제</button>
+          <div class="admin-card-actions">
+            <button type="button" class="white-btn" data-product-delete="${p.id}">삭제</button>
+          </div>
         </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
+
+  // ✅ 수정: innerHTML 재렌더 후 이벤트 리스너를 새로 붙임 (누적 없음)
   listEl.querySelectorAll('[data-product-delete]').forEach((btn) => {
     btn.addEventListener('click', async function () {
       if (!window.confirm('이 상품을 삭제하시겠습니까?')) return;
@@ -91,6 +118,23 @@ async function renderProductList() {
         alert('상품이 삭제되었습니다.');
       } else {
         alert('삭제에 실패했습니다. 다시 시도해주세요.');
+      }
+    });
+  });
+
+  // ✅ 재고 저장 버튼
+  listEl.querySelectorAll('[data-stock-save]').forEach((btn) => {
+    btn.addEventListener('click', async function () {
+      const productId = btn.dataset.stockSave;
+      const input     = listEl.querySelector(`[data-product-stock-id="${productId}"]`);
+      if (!input) return;
+      const newStock = Number(input.value);
+      const result   = await productService.updateStock(productId, newStock);
+      if (result) {
+        alert(`재고가 ${newStock}개로 업데이트되었습니다.`);
+        await renderProductList();
+      } else {
+        alert('재고 업데이트에 실패했습니다.');
       }
     });
   });
@@ -104,7 +148,6 @@ function initProductForm() {
     const btn = form.querySelector('button[type="submit"]');
     if (btn) btn.disabled = true;
 
-    // ✅ 이슈 4 수정: featured 필드 추가
     const category = document.getElementById('productCategory').value;
     const stock    = Number(document.getElementById('productStock').value || 0);
     const result = await productService.create({
@@ -139,6 +182,7 @@ function initProductForm() {
 async function renderNoticeList() {
   const listEl = document.getElementById('adminNoticeList');
   if (!listEl) return;
+  listEl.innerHTML = `<div class="admin-empty">불러오는 중...</div>`;
   const notices = await noticeService.getAll();
   if (!notices.length) {
     listEl.innerHTML = `<div class="admin-empty">등록된 공지가 없습니다.</div>`;
@@ -203,12 +247,13 @@ function initNoticeForm() {
 async function renderOrderList() {
   const listEl = document.getElementById('adminOrderList');
   if (!listEl) return;
+  listEl.innerHTML = `<div class="admin-empty">불러오는 중...</div>`;
   const orders = await orderService.getAll();
   if (!orders.length) {
     listEl.innerHTML = `<div class="admin-empty">주문 데이터가 없습니다.</div>`;
     return;
   }
-  listEl.innerHTML = await Promise.all(orders.map(async (order) => {
+  const cards = await Promise.all(orders.map(async (order) => {
     const first = order.items?.[0] || {};
     const user  = await userService.getById(order.user_id);
     return `
@@ -238,7 +283,8 @@ async function renderOrderList() {
         </div>
       </div>
     `;
-  })).then(items => items.join(''));
+  }));
+  listEl.innerHTML = cards.join('');
   listEl.querySelectorAll('[data-order-status]').forEach((select) => {
     select.addEventListener('change', async function () {
       await orderService.updateStatus(select.dataset.orderStatus, select.value);
@@ -253,16 +299,14 @@ async function initAdminPage() {
   await userService.init();
   if (!ensureAdminAccess()) return;
 
-  // 공통 UI (헤더 등)도 초기화
   initMobileMenu();
   toggleAdminMenu();
   updateLoginNavLink();
 
-  await Promise.all([
-    renderProductList(),
-    renderNoticeList(),
-    renderOrderList(),
-  ]);
+  // ✅ 순차 실행으로 변경 — Promise.all은 하나 실패 시 전체 실패 위험
+  await renderProductList();
+  await renderNoticeList();
+  await renderOrderList();
 
   initProductForm();
   initNoticeForm();
