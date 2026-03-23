@@ -89,6 +89,41 @@ function createProductDetail(product) {
             </button>
           </div>
         </div>
+
+        <!-- 배송/환불 정책 -->
+        <div class="product-policy-wrap">
+          <details class="policy-accordion">
+            <summary class="policy-accordion-title">배송 안내</summary>
+            <div class="policy-accordion-body">
+              ${isPostcard ? `
+              <p>· 우편 발송 방식으로 배송됩니다.</p>
+              <p>· 결제 완료 후 영업일 기준 3~7일 이내 발송됩니다.</p>
+              <p>· 배송비: 3,000원 (주문 금액에 포함)</p>
+              <p>· 잘못된 주소 입력으로 인한 배송 실패는 책임지지 않습니다.</p>
+              ` : `
+              <p>· 디지털 파일로 제공되며 배송이 없습니다.</p>
+              <p>· 결제 완료 후 마이페이지에서 즉시 다운로드 가능합니다.</p>
+              <p>· 배송비 없음</p>
+              `}
+            </div>
+          </details>
+          <details class="policy-accordion">
+            <summary class="policy-accordion-title">교환 / 환불 안내</summary>
+            <div class="policy-accordion-body">
+              ${isPostcard ? `
+              <p>· 구매일로부터 7일 이내 환불 신청 가능합니다.</p>
+              <p>· 상품 수령 후 포장 훼손 또는 사용한 경우 환불이 불가합니다.</p>
+              <p>· 환불 문의: sudols991004@gmail.com</p>
+              <p>· 환불은 영업일 기준 3~5일 내 처리됩니다.</p>
+              ` : `
+              <p>· 디지털 상품 특성상 다운로드 완료 후 환불이 불가합니다.</p>
+              <p>· 다운로드 전 환불 신청은 구매일로부터 7일 이내 가능합니다.</p>
+              <p>· 환불 문의: sudols991004@gmail.com</p>
+              `}
+            </div>
+          </details>
+        </div>
+
       </div>
     </div>
   `;
