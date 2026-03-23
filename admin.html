@@ -20,6 +20,7 @@
       </nav>
       <h1 class="logo">PEOPLE IN PLACES</h1>
       <nav class="nav nav-right">
+        <a href="login.html">Login</a>
         <a href="mypage.html">My page</a>
       </nav>
     </div>
@@ -28,6 +29,7 @@
       <a href="homepage.html">Home</a>
       <a href="shop.html">Shop</a>
       <a href="info.html">Info</a>
+      <a href="login.html">Login</a>
       <a href="mypage.html">My page</a>
     </div>
   </header>
@@ -95,13 +97,21 @@
       </div>
       <div class="footer-info">
         <p>퍼플인플레이스(PEOPLE IN PLACES) 사업자정보 통신판매신고번호</p>
-        <p>CEO 이수현 ADDRESS 경기도 하남시 하남대로 895 전화번호 010-8356-0850 이메일 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f7848293989d84c7cec6c7c7c3b7909a969e9bd994989a">[email&#160;protected]</a></p>
+        <p>CEO 이수현 ADDRESS 경기도 하남시 하남대로 895 전화번호 010-8356-0850 이메일 sudols891004@gmail.com</p>
         <p>CONTACT 인스타그램 @people_in_places</p>
       </div>
       <p class="copyright">Copyright moondueg all rights reserved</p>
     </div>
   </footer>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <!-- ✅ 수정: 스크립트 로드 순서 정상화 + 누락된 태그 닫힘 복구 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script src="js/supabase.js"></script>
-  <script src="js/userService.js"></script
+  <script src="js/userService.js"></script>
+  <script src="js/productService.js"></script>
+  <script src="js/noticeService.js"></script>
+  <script src="js/orderService.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
