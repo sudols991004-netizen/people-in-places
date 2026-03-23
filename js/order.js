@@ -1,5 +1,6 @@
 // ============================================================
 // order.js — 토스페이먼츠 v2 연동
+// ✅ 수정: pip:ready 이벤트 방식으로 변경 → userService.init() 완료 후 실행 보장
 // ============================================================
 
 const TOSS_CLIENT_KEY   = 'test_ck_6bJXmgo28ew2NMPx6l4YVLAnGKWx';
@@ -12,10 +13,6 @@ function formatPrice(price) {
 function getSelectedProductOrder() {
   const saved = localStorage.getItem('selectedProductOrder');
   return saved ? JSON.parse(saved) : null;
-}
-
-function clearSelectedProductOrder() {
-  localStorage.removeItem('selectedProductOrder');
 }
 
 function renderEmptyOrderPage() {
@@ -42,7 +39,6 @@ function renderOrderSummary(draft) {
   const isPostcard  = (draft.category || '').toLowerCase() === 'postcard';
   const shippingFee = draft.shippingFee != null ? draft.shippingFee : (isPostcard ? POSTCARD_SHIPPING : 0);
   const itemTotal   = draft.price * draft.quantity;
-  // totalPrice가 이미 배송비 포함된 경우 그대로 사용, 아니면 계산
   const finalTotal  = draft.totalPrice || (itemTotal + shippingFee);
 
   container.innerHTML = `
@@ -61,11 +57,10 @@ function renderOrderSummary(draft) {
   if (quantityEl)   quantityEl.textContent   = `${draft.quantity}개`;
   if (finalPriceEl) finalPriceEl.textContent = formatPrice(finalTotal);
 
-  // 배송비 행 표시 (Postcard만)
   const shippingRow = document.getElementById('summaryShippingRow');
   const shippingEl  = document.getElementById('summaryShipping');
   if (shippingRow) shippingRow.style.display = isPostcard ? 'flex' : 'none';
-  if (shippingEl && isPostcard)  shippingEl.textContent = formatPrice(shippingFee);
+  if (shippingEl && isPostcard) shippingEl.textContent = formatPrice(shippingFee);
 }
 
 function fillOrderFormUserInfo() {
@@ -78,7 +73,6 @@ function fillOrderFormUserInfo() {
   f('orderAddress', user.address);
 }
 
-// ── 입력값 유효성 체크 ───────────────────────────────────────
 function validateOrderForm() {
   const recipient = document.getElementById('orderName').value.trim();
   const phone     = document.getElementById('orderPhone').value.trim();
@@ -92,14 +86,10 @@ function validateOrderForm() {
   return true;
 }
 
-// ── 토스페이먼츠 결제 요청 ───────────────────────────────────
 async function requestTossPayment(draft) {
   const user = userService.getCurrent();
-
-  // 주문 고유 ID 생성 (타임스탬프 + 랜덤)
   const orderId = 'PIP-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7).toUpperCase();
 
-  // 결제 전 임시 주문 정보 저장 (결제 완료 콜백에서 사용)
   const pendingOrder = {
     orderId,
     draft,
@@ -114,13 +104,11 @@ async function requestTossPayment(draft) {
   };
   sessionStorage.setItem('pip_pending_order', JSON.stringify(pendingOrder));
 
-  // 토스페이먼츠 클라이언트 초기화
   const tossPayments = TossPayments(TOSS_CLIENT_KEY);
   const payment = tossPayments.payment({
     customerKey: user?.id || 'GUEST-' + Date.now(),
   });
 
-  // 결제창 호출
   await payment.requestPayment({
     method: 'CARD',
     amount: {
@@ -129,32 +117,25 @@ async function requestTossPayment(draft) {
     },
     orderId,
     orderName: draft.title,
-    customerName: document.getElementById('orderName').value.trim(),
-    customerEmail: document.getElementById('orderEmail').value.trim(),
+    customerName:        document.getElementById('orderName').value.trim(),
+    customerEmail:       document.getElementById('orderEmail').value.trim(),
     customerMobilePhone: document.getElementById('orderPhone').value.trim().replace(/-/g, ''),
     successUrl: window.location.origin + '/order-success.html',
     failUrl:    window.location.origin + '/order-fail.html',
   });
 }
 
-// ── 결제하기 버튼 ────────────────────────────────────────────
 function initOrderForm(draft) {
   const submitBtn = document.getElementById('submitOrderBtn');
   if (!submitBtn) return;
-
   submitBtn.addEventListener('click', async function () {
     if (!validateOrderForm()) return;
-
     this.disabled    = true;
     this.textContent = '결제창 로딩 중...';
-
     try {
       await requestTossPayment(draft);
     } catch (err) {
-      // 사용자가 결제창을 닫은 경우 등
-      if (err.code === 'USER_CANCEL') {
-        // 취소는 에러 아님 — 조용히 처리
-      } else {
+      if (err.code !== 'USER_CANCEL') {
         alert('결제 중 오류가 발생했습니다: ' + (err.message || ''));
       }
     } finally {
@@ -164,23 +145,19 @@ function initOrderForm(draft) {
   });
 }
 
-async function initOrderPage() {
-  await userService.init();
-
+// ✅ 핵심 수정: DOMContentLoaded → pip:ready 이벤트로 변경
+// common.js가 userService.init() 완료 후 pip:ready를 dispatch하므로
+// 이 시점엔 userService.getCurrent()가 반드시 값을 가짐 (race condition 해소)
+window.addEventListener('pip:ready', async function () {
   if (!userService.isLoggedIn()) {
     alert('로그인이 필요합니다.');
     sessionStorage.setItem('pip_return_url', window.location.href);
     window.location.href = 'login.html';
     return;
   }
-
   const draft = getSelectedProductOrder();
   if (!draft) { renderEmptyOrderPage(); return; }
   renderOrderSummary(draft);
-  fillOrderFormUserInfo();
+  fillOrderFormUserInfo(); // ✅ pip:ready 이후 호출 → user 데이터 완전히 로드된 상태
   initOrderForm(draft);
-}
-
-document.addEventListener('DOMContentLoaded', async function () {
-  await initOrderPage();
 });
