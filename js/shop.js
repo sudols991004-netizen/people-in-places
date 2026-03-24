@@ -19,9 +19,7 @@ function getSoldOutBadge(product) {
 
 function createProductCard(product) {
   const isPostcard = (product.category || '').toLowerCase() === 'postcard';
-  const stockText  = isPostcard && product.stock != null && product.stock <= 10
-    ? `<span class="product-stock-badge">남은수량 ${product.stock}개</span>`
-    : '';
+  const stockText  = '';
   const shippingText = isPostcard
     ? `<p class="product-shipping">배송비 3,000원</p>`
     : `<p class="product-shipping">디지털 다운로드</p>`;

@@ -89,5 +89,6 @@ async function initCommon() {
 document.addEventListener('DOMContentLoaded', async function () {
   const path = window.location.pathname;
   if (path.includes('admin.html')) return;
+  if (path.includes('login.html')) return;
   await initCommon();
 });
