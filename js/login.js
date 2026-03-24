@@ -134,7 +134,7 @@ async function loginPageInit() {
   document.getElementById('kakaoShippingSkipBtn').addEventListener('click', async function () {
     var meta = userService._currentUser?.user_metadata || {};
     var kakaoName = meta.name || meta.full_name || 'kakao_user';
-    await userService.saveKakaoProfile({ name: kakaoName, phone: '_skip_' });
+    await userService.saveKakaoProfile({ name: kakaoName, phone: '', address: '', postcode: '' });
     closeAll();
     var returnUrl = sessionStorage.getItem('pip_return_url') || 'homepage.html';
     sessionStorage.removeItem('pip_return_url');
