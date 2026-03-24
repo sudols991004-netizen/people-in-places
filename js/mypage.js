@@ -158,7 +158,6 @@ function initProfileForm(user) {
   if (!form) return;
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
-    const password   = document.getElementById('profilePassword').value.trim();
     const updateData = {
       name:    document.getElementById('profileName').value.trim(),
       phone:   document.getElementById('profilePhone').value.trim(),
@@ -166,10 +165,6 @@ function initProfileForm(user) {
       address: document.getElementById('profileAddress')?.value.trim() || '',
     };
     await userService.update(user.id, updateData);
-    if (password) {
-      const result = await userService.updatePassword(password);
-      if (!result.success) { alert('비밀번호 변경 실패: ' + result.message); return; }
-    }
     alert('회원 정보가 수정되었습니다.');
     location.reload();
   });
