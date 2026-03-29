@@ -379,3 +379,72 @@
 .product-detail-stock strong {
   color: #111;
 }
+
+/* ── 배송/환불 정책 아코디언 ── */
+.product-policy-wrap {
+  margin-top: 32px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.policy-accordion {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.policy-accordion-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.policy-accordion-title::-webkit-details-marker {
+  display: none;
+}
+
+.policy-accordion-title::after {
+  content: '+';
+  font-size: 16px;
+  font-weight: 300;
+  color: #999;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.policy-accordion[open] .policy-accordion-title::after {
+  content: '−';
+  color: #333;
+}
+
+.policy-accordion-body {
+  padding: 0 0 20px;
+  font-size: 12px;
+  color: #666;
+  line-height: 2;
+  background: #fafafa;
+  margin: 0 -12px;
+  padding: 14px 12px 16px;
+  border-top: 1px solid #efefef;
+}
+
+.policy-accordion-body p {
+  margin-bottom: 4px;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.policy-accordion-body p::before {
+  content: '—';
+  color: #bbb;
+  flex-shrink: 0;
+  font-size: 11px;
+  margin-top: 1px;
+}
