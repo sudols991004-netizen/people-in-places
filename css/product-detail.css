@@ -448,3 +448,49 @@
   font-size: 11px;
   margin-top: 1px;
 }
+
+/* ── 이미지 갤러리 ── */
+.product-detail-image-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.product-gallery-thumbs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.product-gallery-thumb {
+  width: 72px;
+  height: 72px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.product-gallery-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.product-gallery-thumb:hover,
+.product-gallery-thumb.is-active {
+  border-color: #111;
+}
+
+#productMainImage {
+  transition: opacity 0.2s ease;
+}
+
+@media (max-width: 768px) {
+  .product-gallery-thumb {
+    width: 60px;
+    height: 60px;
+  }
+}
