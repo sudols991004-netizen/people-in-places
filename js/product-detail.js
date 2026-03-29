@@ -51,10 +51,29 @@ function createProductDetail(product) {
         <span class="shipping-value">디지털 파일 다운로드 (배송비 없음)</span>
       </div>`;
 
+  // 이미지 배열 구성 (thumbnail + images 배열)
+  const allImages = [product.thumbnail];
+  if (product.images && product.images.length > 0) {
+    product.images.forEach(img => { if (img && img !== product.thumbnail) allImages.push(img); });
+  }
+
+  const galleryHtml = allImages.length > 1 ? `
+    <div class="product-gallery-thumbs">
+      ${allImages.map((img, i) => `
+        <div class="product-gallery-thumb${i === 0 ? ' is-active' : ''}" data-img="${img}">
+          <img src="${img}" alt="${product.title} ${i + 1}">
+        </div>
+      `).join('')}
+    </div>
+  ` : '';
+
   return `
     <div class="product-detail-layout">
-      <div class="product-detail-image-wrap">
-        <img src="${product.thumbnail}" alt="${product.title}">
+      <div class="product-detail-image-col">
+        <div class="product-detail-image-wrap">
+          <img id="productMainImage" src="${product.thumbnail}" alt="${product.title}">
+        </div>
+        ${galleryHtml}
       </div>
       <div class="product-detail-info">
         <p class="product-detail-category">${category}</p>
@@ -230,6 +249,23 @@ function initDetailButtons(product) {
   }
 }
 
+function initImageGallery() {
+  const mainImg = document.getElementById('productMainImage');
+  if (!mainImg) return;
+  document.querySelectorAll('.product-gallery-thumb').forEach((thumb) => {
+    thumb.addEventListener('mouseenter', function () {
+      mainImg.src = this.dataset.img;
+      document.querySelectorAll('.product-gallery-thumb').forEach(t => t.classList.remove('is-active'));
+      this.classList.add('is-active');
+    });
+    thumb.addEventListener('click', function () {
+      mainImg.src = this.dataset.img;
+      document.querySelectorAll('.product-gallery-thumb').forEach(t => t.classList.remove('is-active'));
+      this.classList.add('is-active');
+    });
+  });
+}
+
 async function renderProductDetailPage() {
   const container = document.getElementById('productDetailContainer');
   if (!container) return;
@@ -240,6 +276,7 @@ async function renderProductDetailPage() {
   container.innerHTML = createProductDetail(product);
   initQuantityControl(product);
   initDetailButtons(product);
+  initImageGallery();
 }
 
 // ✅ pip:ready 이벤트 대기 — userService.init() 완료 보장
