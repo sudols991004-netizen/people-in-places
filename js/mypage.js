@@ -49,7 +49,7 @@ function renderOrderHistory(orders) {
           </div>
           <div class="order-card-actions">
             <button type="button" class="white-btn order-detail-btn" data-order-id="${order.id}">상세보기</button>
-            ${isWallpaper ? `<button type="button" class="black-btn order-download-btn" data-thumbnail="${first.thumbnail}" data-title="${first.title}">다운로드</button>` : ''}
+            ${isWallpaper ? `<button type="button" class="black-btn order-download-btn" data-download-url="${first.downloadUrl || first.thumbnail}" data-title="${first.title}">다운로드</button>` : ''}
           </div>
         </div>
       </div>
@@ -75,7 +75,7 @@ function renderOrderHistory(orders) {
   // 다운로드 버튼
   listEl.querySelectorAll('.order-download-btn').forEach((btn) => {
     btn.addEventListener('click', function () {
-      downloadWallpaper(btn.dataset.thumbnail, btn.dataset.title);
+      downloadWallpaper(btn.dataset.downloadUrl, btn.dataset.title);
     });
   });
 }
@@ -135,7 +135,7 @@ function renderOrderDetail(order) {
               </p>
             </div>
             <div class="order-card-actions">
-              ${isWallpaper ? `<button type="button" class="black-btn" onclick="downloadWallpaper('${item.thumbnail}', '${item.title}')">다운로드</button>` : ''}
+              ${isWallpaper ? `<button type="button" class="black-btn" onclick="downloadWallpaper('${item.downloadUrl || item.thumbnail}', '${item.title}')">다운로드</button>` : ''}
             </div>
           </div>
         </div>
