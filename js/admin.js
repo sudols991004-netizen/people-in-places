@@ -306,6 +306,13 @@ async function renderOrderList() {
 
 async function initAdminPage() {
   await userService.init();
+
+  // 세션 로드 타이밍 보정 — 리다이렉트 직후 세션이 미완성일 수 있어서 재시도
+  if (!userService.isLoggedIn()) {
+    await new Promise(r => setTimeout(r, 500));
+    await userService.init();
+  }
+
   if (!ensureAdminAccess()) return;
 
   initMobileMenu();
