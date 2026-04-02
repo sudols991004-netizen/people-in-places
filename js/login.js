@@ -116,7 +116,8 @@ async function loginPageInit() {
         return;
       }
       closeAll();
-      var returnUrl = sessionStorage.getItem('pip_return_url') || 'homepage.html';
+      var isAdminLogin = new URLSearchParams(window.location.search).get('admin') === '1';
+      var returnUrl = sessionStorage.getItem('pip_return_url') || (isAdminLogin ? 'admin.html' : 'homepage.html');
       sessionStorage.removeItem('pip_return_url');
       window.location.href = returnUrl;
     });
