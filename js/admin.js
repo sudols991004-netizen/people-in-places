@@ -153,16 +153,19 @@ function initProductForm() {
     const imagesRaw = document.getElementById('productImages')?.value.trim() || '';
     const images = imagesRaw ? imagesRaw.split('\n').map(s => s.trim()).filter(Boolean) : [];
 
+    const downloadUrl = document.getElementById('productDownloadUrl')?.value.trim() || '';
+
     const result = await productService.create({
-      title:       document.getElementById('productTitle').value.trim(),
+      title:        document.getElementById('productTitle').value.trim(),
       category,
-      price:       Number(document.getElementById('productPrice').value),
-      status:      document.getElementById('productStatus').value,
-      thumbnail:   document.getElementById('productThumbnail').value.trim(),
-      images:      images,
-      description: document.getElementById('productDescription').value.trim(),
-      featured:    true,
-      stock:       category === 'postcard' ? stock : 0,
+      price:        Number(document.getElementById('productPrice').value),
+      status:       document.getElementById('productStatus').value,
+      thumbnail:    document.getElementById('productThumbnail').value.trim(),
+      images:       images,
+      download_url: downloadUrl || null,
+      description:  document.getElementById('productDescription').value.trim(),
+      featured:     true,
+      stock:        category === 'postcard' ? stock : 0,
     });
 
     if (btn) btn.disabled = false;
@@ -177,6 +180,7 @@ function initProductForm() {
     document.getElementById('productStatus').value   = 'active';
     document.getElementById('productStock').value    = '0';
     if (document.getElementById('productImages')) document.getElementById('productImages').value = '';
+    if (document.getElementById('productDownloadUrl')) document.getElementById('productDownloadUrl').value = '';
     await renderProductList();
     alert('상품이 등록되었습니다.');
   });
