@@ -55,13 +55,14 @@ const orderService = {
 
     // 2. order_items 행 삽입
     const items = (orderData.items || []).map(item => ({
-      order_id:   order.id,
-      product_id: item.productId || null,
-      title:      item.title,
-      thumbnail:  item.thumbnail || '',
-      category:   item.category  || '',
-      price:      item.price,
-      quantity:   item.quantity,
+      order_id:     order.id,
+      product_id:   item.productId   || null,
+      title:        item.title,
+      thumbnail:    item.thumbnail   || '',
+      category:     item.category    || '',
+      price:        item.price,
+      quantity:     item.quantity,
+      download_url: item.downloadUrl || null,
     }));
 
     if (items.length) {
@@ -122,7 +123,8 @@ function normalizeOrder(order) {
     shippingInfo: order.shipping_info,
     items:        (order.order_items || []).map(item => ({
       ...item,
-      productId: item.product_id,
+      productId:   item.product_id,
+      downloadUrl: item.download_url || null,
     })),
   };
 }
