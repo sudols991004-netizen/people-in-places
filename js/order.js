@@ -107,38 +107,43 @@ async function requestBootpayPayment(draft) {
   };
   sessionStorage.setItem('pip_pending_order', JSON.stringify(pendingOrder));
 
-  const response = await Bootpay.requestPayment({
-    application_id: BOOTPAY_APP_ID,
-    price:          totalPrice,
-    order_name:     draft.title,
-    order_id:       orderId,
-    pg:             'kakaopay',
-    method:         '카카오페이',
-    user: {
-      username:     document.getElementById('orderName').value.trim(),
-      phone:        document.getElementById('orderPhone').value.trim().replace(/-/g, ''),
-      email:        document.getElementById('orderEmail').value.trim(),
-    },
-    items: [{
-      item_name: draft.title,
-      qty:       draft.quantity,
-      unique:    draft.productId || orderId,
-      price:     draft.price,
-    }],
-    extra: {
-      open_type: 'iframe',
-    },
-  });
-
-  if (response.event === 'done') {
-    // 결제 완료 — order-success.html로 이동
-    const params = new URLSearchParams({
-      orderId,
-      amount:     totalPrice,
-      receiptId:  response.data.receipt_id || '',
+  return new Promise((resolve, reject) => {
+    BootPay.request({
+      price:          totalPrice,
+      application_id: BOOTPAY_APP_ID,
+      name:           draft.title,
+      order_id:       orderId,
+      pg:             'kakao',
+      method:         'easy',
+      show_agree_window: 0,
+      user: {
+        username: document.getElementById('orderName').value.trim(),
+        phone:    document.getElementById('orderPhone').value.trim().replace(/-/g, ''),
+        email:    document.getElementById('orderEmail').value.trim(),
+      },
+      items: [{
+        item_name: draft.title,
+        qty:       draft.quantity,
+        unique:    draft.productId || orderId,
+        price:     draft.price,
+      }],
+      extra: {
+        open_type: 'iframe',
+      },
+    }).error(function(data) {
+      reject(data);
+    }).cancel(function(data) {
+      reject({ event: 'cancel', ...data });
+    }).done(function(data) {
+      const params = new URLSearchParams({
+        orderId,
+        amount:    totalPrice,
+        receiptId: data.receipt_id || '',
+      });
+      window.location.href = 'order-success.html?' + params.toString();
+      resolve(data);
     });
-    window.location.href = 'order-success.html?' + params.toString();
-  }
+  });
 }
 
 function initOrderForm(draft) {
