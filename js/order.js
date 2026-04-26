@@ -2,7 +2,7 @@
 // order.js — 부트페이 카카오페이 연동
 // ============================================================
 
-const BOOTPAY_APP_ID    = '69c0df54a4c431ccafe65f87';
+const BOOTPAY_APP_ID    = '69c0df54a4c431ccafe65f84';
 const POSTCARD_SHIPPING = 3000;
 
 function formatPrice(price) {
