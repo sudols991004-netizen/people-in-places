@@ -1,9 +1,8 @@
 // ============================================================
-// order.js — 토스페이먼츠 v2 연동
-// ✅ 수정: pip:ready 이벤트 방식으로 변경 → userService.init() 완료 후 실행 보장
+// order.js — 부트페이 카카오페이 연동
 // ============================================================
 
-const TOSS_CLIENT_KEY   = 'test_ck_6bJXmgo28ew2NMPx6l4YVLAnGKWx';
+const BOOTPAY_APP_ID    = '69c0df54a4c431ccafe65f87';
 const POSTCARD_SHIPPING = 3000;
 
 function formatPrice(price) {
@@ -86,9 +85,13 @@ function validateOrderForm() {
   return true;
 }
 
-async function requestTossPayment(draft) {
-  const user = userService.getCurrent();
+async function requestBootpayPayment(draft) {
+  const user    = userService.getCurrent();
   const orderId = 'PIP-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7).toUpperCase();
+
+  const isPostcard  = (draft.category || '').toLowerCase() === 'postcard';
+  const shippingFee = draft.shippingFee != null ? draft.shippingFee : (isPostcard ? POSTCARD_SHIPPING : 0);
+  const totalPrice  = Number(draft.totalPrice || draft.price * draft.quantity + shippingFee);
 
   const pendingOrder = {
     orderId,
@@ -104,25 +107,38 @@ async function requestTossPayment(draft) {
   };
   sessionStorage.setItem('pip_pending_order', JSON.stringify(pendingOrder));
 
-  const tossPayments = TossPayments(TOSS_CLIENT_KEY);
-  const payment = tossPayments.payment({
-    customerKey: user?.id || 'GUEST-' + Date.now(),
+  const response = await Bootpay.requestPayment({
+    application_id: BOOTPAY_APP_ID,
+    price:          totalPrice,
+    order_name:     draft.title,
+    order_id:       orderId,
+    pg:             'kakaopay',
+    method:         '카카오페이',
+    user: {
+      username:     document.getElementById('orderName').value.trim(),
+      phone:        document.getElementById('orderPhone').value.trim().replace(/-/g, ''),
+      email:        document.getElementById('orderEmail').value.trim(),
+    },
+    items: [{
+      item_name: draft.title,
+      qty:       draft.quantity,
+      unique:    draft.productId || orderId,
+      price:     draft.price,
+    }],
+    extra: {
+      open_type: 'iframe',
+    },
   });
 
-  await payment.requestPayment({
-    method: 'CARD',
-    amount: {
-      currency: 'KRW',
-      value: Number(draft.totalPrice || draft.price * draft.quantity + (((draft.category||'').toLowerCase() === 'postcard') ? POSTCARD_SHIPPING : 0)),
-    },
-    orderId,
-    orderName: draft.title,
-    customerName:        document.getElementById('orderName').value.trim(),
-    customerEmail:       document.getElementById('orderEmail').value.trim(),
-    customerMobilePhone: document.getElementById('orderPhone').value.trim().replace(/-/g, ''),
-    successUrl: window.location.origin + '/order-success.html',
-    failUrl:    window.location.origin + '/order-fail.html',
-  });
+  if (response.event === 'done') {
+    // 결제 완료 — order-success.html로 이동
+    const params = new URLSearchParams({
+      orderId,
+      amount:     totalPrice,
+      receiptId:  response.data.receipt_id || '',
+    });
+    window.location.href = 'order-success.html?' + params.toString();
+  }
 }
 
 function initOrderForm(draft) {
@@ -133,10 +149,10 @@ function initOrderForm(draft) {
     this.disabled    = true;
     this.textContent = '결제창 로딩 중...';
     try {
-      await requestTossPayment(draft);
+      await requestBootpayPayment(draft);
     } catch (err) {
-      if (err.code !== 'USER_CANCEL') {
-        alert('결제 중 오류가 발생했습니다: ' + (err.message || ''));
+      if (err.event !== 'cancel' && err.event !== 'close') {
+        alert('결제 중 오류가 발생했습니다: ' + (err.message || JSON.stringify(err)));
       }
     } finally {
       this.disabled    = false;
@@ -145,9 +161,6 @@ function initOrderForm(draft) {
   });
 }
 
-// ✅ 핵심 수정: DOMContentLoaded → pip:ready 이벤트로 변경
-// common.js가 userService.init() 완료 후 pip:ready를 dispatch하므로
-// 이 시점엔 userService.getCurrent()가 반드시 값을 가짐 (race condition 해소)
 window.addEventListener('pip:ready', async function () {
   if (!userService.isLoggedIn()) {
     alert('로그인이 필요합니다.');
@@ -158,6 +171,6 @@ window.addEventListener('pip:ready', async function () {
   const draft = getSelectedProductOrder();
   if (!draft) { renderEmptyOrderPage(); return; }
   renderOrderSummary(draft);
-  fillOrderFormUserInfo(); // ✅ pip:ready 이후 호출 → user 데이터 완전히 로드된 상태
+  fillOrderFormUserInfo();
   initOrderForm(draft);
 });
