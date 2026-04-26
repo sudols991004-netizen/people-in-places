@@ -116,7 +116,7 @@
 
     async function handlePaymentSuccess() {
       const params     = new URLSearchParams(window.location.search);
-      const paymentKey = params.get('paymentKey');
+      const receiptId  = params.get('receiptId') || '';
       const orderId    = params.get('orderId');
       const amount     = params.get('amount');
       const infoEl     = document.getElementById('resultInfo');
@@ -157,9 +157,9 @@
           category:    pending.draft.category || '',
         }],
         totalPrice:   Number(amount),
-        shippingFee:  pending.draft.shippingFee || 0,
+        shippingFee:  pending.draft.shippingFee != null ? pending.draft.shippingFee : (isPostcard ? 3000 : 0),
         shippingInfo: pending.shippingInfo,
-        paymentKey,
+        receiptId,
         orderId,
       });
 
