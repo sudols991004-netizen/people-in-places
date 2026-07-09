@@ -119,6 +119,8 @@ async function requestBootpayPayment(draft) {
     price:          totalPrice,
     order_name:     draft.title,
     order_id:       orderId,
+    pg:             '카카오',
+    method:         '간편',
     tax_free:       0,
     user: {
       id:       user?.id || '',
