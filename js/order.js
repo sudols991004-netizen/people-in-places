@@ -1,5 +1,8 @@
 // ============================================================
-// order.js — 부트페이 카카오페이 연동
+// order.js — 부트페이(신버전 SDK 4.x) 카카오페이 연동
+// ※ order.html의 SDK 스크립트를 신버전으로 교체해야 합니다.
+//    기존:  <script src="https://cdn.bootpay.co.kr/js/bootpay-3.3.2.min.js"></script>
+//    변경:  <script src="https://js.bootpay.co.kr/bootpay-4.3.4.min.js"></script>
 // ============================================================
 
 const BOOTPAY_APP_ID    = '69c0df54a4c431ccafe65f84';
@@ -107,43 +110,47 @@ async function requestBootpayPayment(draft) {
   };
   sessionStorage.setItem('pip_pending_order', JSON.stringify(pendingOrder));
 
-  return new Promise((resolve, reject) => {
-    BootPay.request({
-      price:          totalPrice,
-      application_id: BOOTPAY_APP_ID,
-      name:           draft.title,
-      order_id:       orderId,
-      pg:             'kakao',
-      method:         'easy',
-      show_agree_window: 0,
-      user: {
-        username: document.getElementById('orderName').value.trim(),
-        phone:    document.getElementById('orderPhone').value.trim().replace(/-/g, ''),
-        email:    document.getElementById('orderEmail').value.trim(),
-      },
-      items: [{
-        item_name: draft.title,
-        qty:       draft.quantity,
-        unique:    draft.productId || orderId,
-        price:     draft.price,
-      }],
-      extra: {
-        open_type: 'iframe',
-      },
-    }).error(function(data) {
-      reject(data);
-    }).cancel(function(data) {
-      reject({ event: 'cancel', ...data });
-    }).done(function(data) {
-      const params = new URLSearchParams({
-        orderId,
-        amount:    totalPrice,
-        receiptId: data.receipt_id || '',
-      });
-      window.location.href = 'order-success.html?' + params.toString();
-      resolve(data);
-    });
+  // ── 신버전 SDK 4.x: Promise 기반 requestPayment ──
+  // pg / method 값은 부트페이 관리자 > 개발자 설정 > 연동 코드에 표기된
+  // 값과 일치해야 합니다. 계속 에러가 나면 pg/method 두 줄을 지워보세요.
+  // (활성화된 결제수단이 카카오페이 하나뿐이면 자동으로 카카오페이가 뜹니다)
+  const response = await Bootpay.requestPayment({
+    application_id: BOOTPAY_APP_ID,
+    price:          totalPrice,
+    order_name:     draft.title,
+    order_id:       orderId,
+    pg:             '카카오페이',
+    method:         '간편결제',
+    tax_free:       0,
+    user: {
+      id:       user?.id || '',
+      username: document.getElementById('orderName').value.trim(),
+      phone:    document.getElementById('orderPhone').value.trim().replace(/-/g, ''),
+      email:    document.getElementById('orderEmail').value.trim(),
+    },
+    items: [{
+      id:    String(draft.productId || orderId),
+      name:  draft.title,
+      qty:   draft.quantity,
+      price: draft.price,
+    }],
+    extra: {
+      open_type: 'iframe',
+    },
   });
+
+  // 결제 완료(done) 시 성공 페이지로 이동
+  if (response.event === 'done') {
+    const receiptId =
+      (response.data && response.data.receipt_id) || response.receipt_id || '';
+    const params = new URLSearchParams({
+      orderId,
+      amount:    totalPrice,
+      receiptId,
+    });
+    window.location.href = 'order-success.html?' + params.toString();
+  }
+  return response;
 }
 
 function initOrderForm(draft) {
@@ -156,7 +163,8 @@ function initOrderForm(draft) {
     try {
       await requestBootpayPayment(draft);
     } catch (err) {
-      if (err.event !== 'cancel' && err.event !== 'close') {
+      // 신버전 SDK는 취소/에러 모두 throw 됩니다
+      if (err && err.event !== 'cancel' && err.event !== 'close') {
         alert('결제 중 오류가 발생했습니다: ' + (err.message || JSON.stringify(err)));
       }
     } finally {
